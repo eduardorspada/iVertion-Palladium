@@ -1,0 +1,140 @@
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">User</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">User</a></li>
+            <li class="breadcrumb-item active">User</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+
+  <section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="card bg-dark">
+
+                    <div class="card-header">
+                        <h3>User</h3>
+                    </div>
+                    <div class="card-body">
+                      <div class="col-lg-12">
+                        <nav>
+                          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="true">Profile</a>
+                            <a class="nav-item nav-link" id="nav-security-tab" data-toggle="tab" href="#nav-security" role="tab" aria-controls="nav-security" aria-selected="false">Security</a>
+                            <a class="nav-item nav-link" id="nav-roles-tab" data-toggle="tab" href="#nav-roles" role="tab" aria-controls="nav-roles" aria-selected="false">Roles</a>
+                          </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                          <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            <dl class="row">
+                              <dt class="col-sm-1">ID:</dt>
+                              <dl class="col-sm-5"># {{user.id}}</dl>
+                            </dl>
+                            <dl class="row">
+                              <dt class="col-sm-1">Full Name:</dt>
+                              <dl class="col-sm-5">{{user.fullName}}</dl>
+                              <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-full-name/:id">Update</button></dl>
+                            </dl>
+                            <dl class="row">
+                              <dt class="col-sm-1">Phone Number:</dt>
+                              <dl class="col-sm-5">{{user.phoneNumber}}</dl>
+                              <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-phone-number/:id">Update</button></dl>
+                            </dl>
+                            <dl class="row">
+                              <dt class="col-sm-1">Profile Picture:</dt>
+                              <dl class="col-sm-5">{{user.profilePicture}}</dl>
+                              <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-profile-picture/:id">Update</button></dl>
+                            </dl>
+                            <dl class="row">
+                              <dt class="col-sm-1">Profile Cover:</dt>
+                              <dl class="col-sm-5">{{user.profileCover}}</dl>
+                              <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-profile-cover/:id">Update</button></dl>
+                            </dl>
+                            <dl class="row">
+                              <dt class="col-sm-1">Profile Description:</dt>
+                              <dl class="col-sm-5">{{user.profileDescription}}</dl>
+                              <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-profile-description/:id">Update</button></dl>
+                            </dl>
+                            <dl class="row">
+                              <dt class="col-sm-1">Occupation:</dt>
+                              <dl class="col-sm-5">{{user.occupation}}</dl>
+                              <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-occupation/:id">Update</button></dl>
+                            </dl>
+                            <dl class="row">
+                              <dt class="col-sm-1">Birthday:</dt>
+                              <dl class="col-sm-5">{{user.birthday}}</dl>
+                              <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-birthday/:id">Update</button></dl>
+                            </dl>
+                            
+                          </div>
+                          <div class="tab-pane fade" id="nav-security" role="tabpanel" aria-labelledby="nav-security-tab">
+                            <dl class="row">
+                                <dt class="col-sm-1">ID:</dt>
+                                <dl class="col-sm-5"># {{user.id}}</dl>
+                            </dl>
+                            <dl class="row">
+                              <dt class="col-sm-1">User Name:</dt>
+                              <dl class="col-sm-5">{{user.userName}}</dl>
+                              <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-user-name/:id">Update</button></dl>
+                            </dl>
+                            <dl class="row">
+                                <dt class="col-sm-1">E-Mail:</dt>
+                                <dl class="col-sm-5">{{user.email}}</dl>
+                                <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-email/:id">Update</button></dl>
+                              </dl>
+                              <dl class="row">
+                                <dt class="col-sm-1">Password:</dt>
+                                <dl class="col-sm-5">******************</dl>
+                                <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-password/:id">Update</button></dl>
+                              </dl>
+                              <dl class="row">
+                                <dt class="col-sm-1">Active:</dt>
+                                <dl class="col-sm-5" *ngIf="user.isEnabled"><i class="fa-solid fa-square-check text-success"></i></dl>
+                                <dl class="col-sm-5" *ngIf="user.isEnabled === false"><i class="fa-solid fa-square-xmark text-danger"></i></dl>
+                                <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/change-status/:id">Update</button></dl>
+                              </dl>
+                            </div>
+                            <div class="tab-pane fade" id="nav-roles" role="tabpanel" aria-labelledby="nav-roles-tab">
+                              <dl class="row">
+                                <dt class="col-sm-1">ID:</dt>
+                                <dl class="col-sm-5"># {{user.id}}</dl>
+                              </dl>
+                              <div class="row">
+                                <div class="col-lg-12">
+                                  <div class="row">
+                                    <div class="col-sm-3" *ngFor="let role of userRoles">
+                                      <div class="card bg-success mb-3">
+                                        <div class="card-header">
+                                          {{role}}
+                                          <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                              <i class="fa-regular fa-trash-can"></i>
+                                            </button>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                    </div>
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>

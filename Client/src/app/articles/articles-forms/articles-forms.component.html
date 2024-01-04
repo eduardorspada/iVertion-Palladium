@@ -1,0 +1,122 @@
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Artigo</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Blog</a></li>
+            <li class="breadcrumb-item active">Artigo</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="card bg-dark">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <h3>Artigo</h3>
+                            </div>
+                            <div class="col-sm-5">
+                                <dl class="row">
+                                    <dt class="col-sm-1">ID:</dt>
+                                    <dl class="col-sm-2"># {{article.id}}</dl>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form #articleForm="ngForm" (ngSubmit)="onSubmit()">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="title">Título</label>
+                                        <input type="text" name="title" id="title" class="form-control" [(ngModel)]="article.title">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="category">Categoria</label>
+                                        <select name="category" id="category" name="category" class="form-control" [(ngModel)]="article.categoryId">
+                                            <option [ngValue]="1">Uncategorized</option>
+                                            <option [ngValue]="2">Notícias</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1 align-self-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input bg-success" type="checkbox" [(ngModel)]="article.active" [ngModelOptions]="{standalone: true}">
+                                        <label for="active" class="form-check-label">Ativo</label>
+                                        <!-- <div class="custom-control custom-checkbox">
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="createdAt">Criado</label>
+                                        <input type="datetime" name="createdAt" id="createdAt" class="form-control" disabled="disabled" [(ngModel)]="article.createdAt">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="author">Autor</label>
+                                        <input type="text" name="author" id="author" class="form-control" disabled="disabled" [(ngModel)]="article.author">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="updatedAt">Atualizado</label>
+                                        <input type="datetime" name="updatedAt" id="updatedAt" class="form-control" disabled="disabled" [(ngModel)]="article.updatedAt">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="user">User</label>
+                                        <input type="text" name="user" id="user" class="form-control" disabled="disabled" [(ngModel)]="article.user">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div [froalaEditor]="options" [(froalaModel)]="article.description" ></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <button type="submit" class="btn btn-success btn-block">
+                                        <i class="fa fa-save"></i> Save
+                                    </button>
+                                </div>
+                                <!-- <div class="col-sm-2">
+                                    <button type="reset" class="btn btn-info btn-block">
+                                        <i class="fa-solid fa-arrow-rotate-left"></i> Limpar
+                                    </button>
+                                </div> -->
+                                <div class="col-sm-2">
+                                    <a class="btn btn-danger btn-block">
+                                        <i class="fa-regular fa-rectangle-xmark"></i> Cancelar
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
