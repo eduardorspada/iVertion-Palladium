@@ -99,7 +99,9 @@ namespace iVertion.WebApi.Controllers
                                                             userInfo.ProfileDescription,
                                                             userInfo.Occupation,
                                                             userInfo.Birthday,
-                                                            userInfo.PhoneNumber);
+                                                            userInfo.PhoneNumber,
+                                                            userInfo.UserProfileId
+                                                            );
             if (result)
             {
                 return Ok($"User {userInfo.Email} was created successfully.");

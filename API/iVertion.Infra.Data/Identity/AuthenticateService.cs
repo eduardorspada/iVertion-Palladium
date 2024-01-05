@@ -39,7 +39,8 @@ namespace iVertion.Infra.Data.Identity
                                              string? profileDescription,
                                              string? occupation,
                                              DateTime? birthday,
-                                             string? phoneNumber)
+                                             string? phoneNumber,
+                                             int userProfileId)
         {
             ApplicationUser applicationUser = new()
             {
@@ -53,7 +54,8 @@ namespace iVertion.Infra.Data.Identity
                 ProfileDescription = profileDescription,
                 Occupation = occupation,
                 Birthday = birthday,
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                UserProfileId = userProfileId
             };
             var result = await _userManager.CreateAsync(applicationUser, password);
 

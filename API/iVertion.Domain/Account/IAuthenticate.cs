@@ -20,7 +20,8 @@ namespace iVertion.Domain.Account
             string? profileDescription,
             string? occupation,
             DateTime? birthday,
-            string? phoneNumber
+            string? phoneNumber,
+            int userProfileId
             );
 
         Task Logout();
