@@ -40,13 +40,13 @@ namespace iVertion.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env, ISeedUserRoleInitial seedUserRoleInitial, IDatabaseInitializer databaseInitializer)
         {
-            if (env.IsDevelopment())
-            {
+            // if (env.IsDevelopment())
+            // {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/iVertion/swagger.json", "iVertion Palladium 1.0"));
                 app.UseCors("AllowSpecificOrigin");
-            }
+            // }
 
             // Configure(
             //     app.ApplicationServices.GetRequiredService<ApplicationDbContext>()
