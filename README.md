@@ -12,7 +12,7 @@ docker-compose build --force-rm --no-cache
 Para subir os conteiners rode o comando
 
 ```bash
-docker-compose build --force-rm --no-cache 
+docker-compose up
 ```
 ## Autores
 
