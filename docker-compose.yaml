@@ -78,10 +78,10 @@ services:
         restart: always
         #Specify Environment Variables for mysql
         environment: 
-            MYSQL_ROOT_PASSWORD: 1V3rT10n
-            MYSQL_USER: ivertion
-            MYSQL_PASSWORD: 1V3rT10n
-            MYSQL_DATABASE: ivertion
+            MARIADB_ROOT_PASSWORD: 1V3rT10n
+            MARIADB_USER: ivertion
+            MARIADB_PASSWORD: 1V3rT10n
+            MARIADB_DATABASE: ivertion
         networks:
             backend:
                 ipv4_address: 172.19.0.8
