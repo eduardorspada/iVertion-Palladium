@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 services:
     proxy:
         build: 
@@ -7,11 +7,6 @@ services:
         ports: 
             - "80:80"
         restart: always
-        networks:
-            backend:
-                ipv4_address: 172.19.0.2
-            frontend:
-                ipv4_address: 172.18.0.2
     client:
         build:
             context: ./Client
@@ -20,9 +15,6 @@ services:
             - "9003:80"
         environment: 
             apiUrl: localhost/api
-        networks:
-            frontend:
-                ipv4_address: 172.18.0.3
     api:
         build: 
             context: ./API
@@ -31,41 +23,29 @@ services:
             - "5000:80"
         restart: always
         environment:
-            - DBHOST=172.19.0.8
+            - DBHOST=db
             - DBPORT=3306
             - DBUSER=ivertion
             - DBPASSWORD=1V3rT10n
-        networks:
-            backend:
-                ipv4_address: 172.19.0.5
-            frontend:
-                ipv4_address: 172.18.0.5
+
         depends_on:
-            - mariadb
+            - db
     phpmyadmin:
         image: phpmyadmin/phpmyadmin:latest
         ports:
             - 8000:80
         environment:
             - PMA_ARBITRARY=1
-            - PMA_HOST=mariadb
-        networks:
-            backend:
-                ipv4_address: 172.19.0.6
-            frontend:
-                ipv4_address: 172.18.0.6
+            - PMA_HOST=db
+
     php:
         image: php:7.2-fpm
         volumes:
         - /var/www/docker-study.loc/recipe-03/php:/var/www/myapp
         - /var/www/docker-study.loc/recipe-03/docker/php.ini:/usr/local/etc/php/php.ini
-        networks:
-            frontend:
-                ipv4_address: 172.18.0.7
-            backend:
-                ipv4_address: 172.19.0.7
+
     #DataBase Service
-    mariadb:
+    db:
         #Pull the latest mysql image
         image: mariadb:lts-jammy
         #Map port 3306 on the mysql container to port 3306 in the host
@@ -82,23 +62,10 @@ services:
             MARIADB_USER: ivertion
             MARIADB_PASSWORD: 1V3rT10n
             MARIADB_DATABASE: ivertion
-        networks:
-            backend:
-                ipv4_address: 172.19.0.8
+
 
 volumes:
     db-volume:
 
-networks:
-  frontend:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.18.0.0/16
-  backend:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.19.0.0/16
 
 
