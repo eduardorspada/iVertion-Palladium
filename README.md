@@ -36,7 +36,7 @@ O iVertion WebApi é o backend da aplicação, foi desenvolvido com .NET 6, MySq
 
 O projeto tem toda a estrutura com *Clean Architecture*, usa os padrões do *S.O.L.I.D* como princípios de boas práticas.
 
-A abordagem *Code First* foi utilizada em conjnto com o ORM *Entity Framework*, isso tende a facilitar o deploy, assim como possíveis adaptações a certas necessidades como por exemplo a mudança da tecnologia de banco de dados empregada caso necessário.
+A abordagem *Code First* foi utilizada em conjunto com o ORM *Entity Framework*, isso tende a facilitar o deploy, assim como possíveis adaptações a certas necessidades como por exemplo a mudança da tecnologia de banco de dados empregada caso necessário.
 
 A documentação é gerada automaticamente pelo *Swagger*, o que facilita o entendimento dos endpoints.
 
@@ -129,7 +129,7 @@ dotnet ef  database update --project iVertion.Infra.Data -s iVertion.WebApi -c A
 
 ### Executando a API
 
-Após o ambiente de desenvovimento do .NET configurado, vamos iniciar o projeto API, lembre-se de estar na raiz do projeto API para executar os comandos.
+Após o ambiente de desenvolvimento do .NET configurado, vamos iniciar o projeto API, lembre-se de estar na raiz do projeto API para executar os comandos.
 
 A seguir vamos atualizar os pacotes do projeto, dessa forma garantimos que as dependências sejam instaladas corretamente.
 
@@ -164,12 +164,12 @@ Os testes podem ser executados diretamente no Swagger, mas não será possível 
 ## Deploy
 
 ### Realizando um deploy no Docker
-Para compilar as imagens rode o comando
+Para compilar as imagens execute o comando
 
 ```bash
 docker-compose build --force-rm --no-cache 
 ```
-Para subir os conteiners rode o comando
+Para subir os contêiners rode o comando
 
 ```bash
 docker-compose up
