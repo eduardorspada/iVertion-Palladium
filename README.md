@@ -1,4 +1,8 @@
 
+## Índice
+
+* [Introdução](#iVertion-Palladium)
+    * [iVertion WebApi](#iVertion-WebApi)
 # iVertion-Palladium
 
 A proposta dessa aplicação é oferecer um ERP completo com módulos que vão desde a administração do sistema e configuração, RH, Financeiro e Fiscal até Linha de Produção, Estoque e E-Commerce.
@@ -402,9 +406,200 @@ Exemplo:
 ```bash
 npx ng g c users/users-list
 ```
+
+#### Alimentando as views com dados da **API**
+
+Para consumir a nossa **API**, serão necessários a criação de serviços, os quais, segundo a autenticação implementada devem realizar requisições na **API** e retornar os dados em forma de objeto.
+
+Para criar nosso serviço vamos usar o seguinte comando:
+
+```bash
+npx ng g s nome-do-servico
+```
+
+- `s` - É a abreviação de "service" (serviço, em português). Um serviço é um componente Angular que fornece funcionalidade para outros componentes.
+
+Exemplo:
+
+```bash
+npx ng g s users
+```
+
+O comando acima gerou na raiz do diretório `src/app/` o arquivo `users.service.ts`
+
+Antes de começar a editar esse arquivo, vamos criar manualmente uma classe no módulo *users* com a nomenclatura `user`. Para isso criaremos um arquivo denominado `user.ts` na raiz do módulo *users*.
+
+```typescript
+export class User {
+    id: string;
+    userName: string;
+    firstName: string;
+    lastName: string;
+    fullName: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+    isEnabled: boolean;
+    profilePicture: string;
+    profileCover: string;
+    profileDescription: string;
+    occupation: string;
+    birthday: Date;
+    phoneNumber: string;
+
+    constructor (){
+        this.id = "";
+        this.userName = "";
+        this.firstName = "";
+        this.lastName = "";
+        this.fullName = "";
+        this.email = "";
+        this.password = "";
+        this.confirmPassword = "";
+        this.isEnabled = false;
+        this.profilePicture = "";
+        this.profileCover = "";
+        this.profileDescription = "";
+        this.occupation = "";
+        this.birthday = new Date();
+        this.phoneNumber = "";
+    }
+}
+```
+
+Os atributos da classe são os mesmos da documentação da **API**, é importante respeitar o nome e o tipo de cada propriedade.
+
+Criamos a classe `user` porque o *TypeScript* é tipado, diferente do *JavaScript*, nossos métodos devem retornar somente os objetos que esperamos.
+
+Agora vamos editar o nosso serviço. Inicialmente iremos atualizar os imports, essa etapa acontece automaticamente enquanto vamos codificando, mas para fins didáticos, vamos explicar os imports no momento.
+
+```typescript
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.development';
+import { User } from './users/user';
+import { Observable } from 'rxjs';
+```
+
+Para ter acesso aos endpoints da **API**, vamos usar a biblioteca `HttpClient`, com ela, nosso código será capaz de executar os métodos `http`.
+
+A biblioteca `Injectable` é padrão do serviço, já deve vir importado, mas em resumo, permite a injeção do serviço.
+
+Para poder acessar as variáveis de ambiente, temos o `environment` como o nome já diz, ele vai permitir configurar tanto em ambiente de desenvolvimento como em produção.
+
+O nosso objeto que criamos a pouco `User` servirá para tipificar nossos retornos dos métodos.
+
+E para que possamos operar de forma assícrona, temos o `Observable` que deve esperar o retorno da requisição sem bloquear o aplicativo.
+
+Agora vamos ver como ficou o nosso `users.service.ts`.
+
+
+```typescript
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.development';
+import { User } from './users/user';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UsersService {
+
+  constructor() {
+  }
+
+}
+```
+Agora vamos recuperar o valor da url da **API** das configurações de `environment`, da forma que está configurado no diretório `src/environments`, nosso código será capaz de identificar tanto no ambiente de desenvovimento como em produção qual é o url correto.
+
+```typescript
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.development';
+import { User } from './users/user';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UsersService {
+  apiUrl: string = environment.apiUrl;
+  constructor() {
+  }
+
+}
+```
+
+Perfeito, agora precisamos configurar o `HttpClient` no contrutor para que os métodos possam ser acessados por nosso serviço.
+
+```typescript
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.development';
+import { User } from './users/user';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UsersService {
+  apiUrl: string = environment.apiUrl;
+  constructor(private http: HttpClient) { }
+
+}
+```
+
+Agora com esses detalhes configurados, podemos criar nosso primeiro método. Lembra que a pouco criamos um componente chamado `users-list`? Que tal popularmos essa view primeiro?
+
+Vamos criar o método `getUsers()` que irá retornar um *Array* de `User`.
+
+```typescript
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.development';
+import { User } from './users/user';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UsersService {
+  apiUrl: string = environment.apiUrl;
+  constructor(private http: HttpClient) { }
+
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/User`, 
+      {
+        headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+  }
+
+}
+```
+Ótimo, agora que temos nosso método `getUsers()`, vamos para nosso componente implementar nosso serviço. Inicialmente, o ideal é configurar nossa rota para ir testando a visualização da listagem.
+
+Abra o arquivo `users-routing.module.ts` e vamos fazer algumas alterações nele.
+
+```typescript
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class UsersRoutingModule { }
+```
+
+
 ## Deploy
 
-### Realizando um deploy no Docker
+#### Realizando um build com Docker
 Para compilar as imagens execute o comando
 
 ```bash
