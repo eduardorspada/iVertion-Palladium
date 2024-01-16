@@ -596,7 +596,51 @@ const routes: Routes = [];
 export class UsersRoutingModule { }
 ```
 
+Como falamos anteriormente, os imports vão atualizando conforme incluímos nossos objetos no código, então vamos pular essa parte e vamos editar diretamente a constante `routes`.
 
+Nosso projeto usa um template do [AdminLTE 3](https://adminlte.io/docs/3.2/), já configuramos a base do template no componente `manager`, além disso, como esses dados que vamos resgatar necessitam da autenticação, vamos usar nosso `authGuard` com a diretiva `canActivate` para inibir o acesso as rotas de pessoas não autorizadas.
+
+```typescript
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { ManagerComponent } from '../manager/manager.component';
+import { authGuard } from '../auth.guard';
+
+const routes: Routes = [
+    {path: 'manager/users', component: ManagerComponent, canActivate: [authGuard]}
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class UsersRoutingModule { }
+```
+Agora se acessarmos a rota `http://localhost:4200/manager/users` será possível enxergar a base do template, precisamos configurar uma rota filha para ver a listagem dos usuários, para isso vamos adicionar a diretiva `children`.
+
+```typescript
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { ManagerComponent } from '../manager/manager.component';
+import { authGuard } from '../auth.guard';
+import { UsersListComponent } from './users-list/users-list.component';
+import { UserComponent } from './user/user.component';
+
+const routes: Routes = [
+    {path: 'manager/users', component: ManagerComponent, canActivate: [authGuard], children: [
+    {path: 'list', component: UsersListComponent},
+    {path: 'user/:id', component: UserComponent}
+  ]}
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class UsersRoutingModule { }
+```
+
+Aproveitamos a deixa e adicionamos uma rota extra que retorna uma view de usuário pelo seu `id`.
 ## Deploy
 
 #### Realizando um build com Docker
