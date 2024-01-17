@@ -1,9 +1,22 @@
 
 ## Índice
-
+* [Índice](#%C3%ADndice)
 * [Introdução](#iVertion-Palladium)
-    * [iVertion WebApi](#iVertion-WebApi)
+    * [Autores](#Autores)
+    * [Ambiente de desenvolvimento](#Ambiente-de-desenvolvimento)
+        * [Xampp](#XAMPP)
+        * [iVertion WebApi](#iVertion-WebApi)
 # iVertion-Palladium
+
+Simples, Poderoso, iVertion: O ERP da Sua Empresa.
+
+Em um momento de intensa reflexão sobre a missão de revolucionar a gestão empresarial, a equipe fundadora do iVertion se encontrou imersa em um redemoinho de ideias. Buscavam não apenas um nome, mas uma identidade que encapsulasse a essência do que estavam prestes a oferecer ao mundo dos negócios.
+
+A primeira sílaba, o "i", foi escolhida como um elo simbólico com a era digital, representando a interconexão e a inteligência que impulsionaria o software. Era mais do que uma simples referência à internet; era um convite para a integração, a inovação e a inteligência, os pilares essenciais que moldariam cada linha de código.
+
+A segunda parte, "Vertion", foi criada a partir de uma fusão de duas palavras poderosas: "versão" e "inovação". Essa fusão foi um epifânico insight da equipe, simbolizando não apenas a evolução constante do produto, mas também a inversão de paradigmas tradicionais nos processos de gestão. Era uma promessa de transformar a maneira como as empresas operavam, uma versão completamente nova do que o mundo corporativo já conhecia.
+
+Assim, "iVertion" nasceu não apenas como um nome, mas como uma declaração de intenções. Cada letra, cada sílaba, carrega consigo o compromisso de impulsionar as empresas para o futuro, através de uma plataforma que não apenas acompanha, mas antecipa e inspira a mudança.
 
 A proposta dessa aplicação é oferecer um ERP completo com módulos que vão desde a administração do sistema e configuração, RH, Financeiro e Fiscal até Linha de Produção, Estoque e E-Commerce.
 
@@ -12,6 +25,8 @@ A proposta dessa aplicação é oferecer um ERP completo com módulos que vão d
 ## Autores
 
 - [@Eduardo Rodrigo Spada](https://www.github.com/eduardorspada)
+
+- [@Rudymar Renato Spada](https://github.com/rudymarspd?tab=overview&from=2024-01-01&to=2024-01-17)
 
 ## Ambiente de desenvolvimento
 
@@ -936,7 +951,7 @@ Com isso já temos dados para colocar no html, abra o arquivo `users-list.compon
   </section>
 ```
 
-Perceba como implementamos o `*ngFor` na linha *41* para replicar as linhas da nossa tabela, também utilizamos a **concatenação** para acessar os dados de `user`. Nas linhas *47* e *48* usamos o `*ngIf` para condicionar a impressão da informação e por fim o `routerLink` que também faz parte do `Router` implementado diretamente no módulo, cuida das rotas dentro do html, ou seja, não usamos mais o `href` para os links internos. Com isso já é possível entender um pouco do funcionamento do projeto **Client** e como podemos contribuir com seu desenvolvimento.
+Perceba como implementamos o `*ngFor` na linha *41* para replicar as linhas da nossa tabela, também utilizamos a **concatenação** para acessar os dados de `user`. e nas linhas *47* e *48* usamos o `*ngIf` para condicionar a impressão da informação. Com isso já é possível entender um pouco do funcionamento do projeto **Client** e como podemos contribuir com seu desenvolvimento.
 ## Deploy
 
 #### Realizando um build com Docker
