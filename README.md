@@ -640,7 +640,303 @@ const routes: Routes = [
 export class UsersRoutingModule { }
 ```
 
-Aproveitamos a deixa e adicionamos uma rota extra que retorna uma view de usuário pelo seu `id`.
+Aproveitamos a deixa e adicionamos uma rota extra que retorna uma view de usuário pelo seu `id`. Não é nosso foco, mas consulte o código para entender seu comportamento depois de trabalhar nessa listagem, no serviço também ciramos os métodos `getUsersById(id: string)` e `getRolesByUserName(userName: string)`, vale muito a pena conferir depois.
+
+Primeiramente vamos identificar qual role está relacionada ao nosso endpoint no projeto **API**. Navegue até ele, na camada *iVertion.WebApi*, no diretório `Controllers` e abra o arquivo `UserController.cs`, encontre o método que retorna os usuários e verifique a configuração de `[Authorize]`.
+
+```csharp
+/// <summary>
+/// Returns a list of users.
+/// </summary>
+/// <returns></returns>
+[HttpGet]
+[Authorize(Roles = "GetUsers")]
+public async Task<ActionResult> Get()
+{
+    var users = await _userService.GetUsersAsync();
+    return Ok(users);
+}
+```
+A role do método é `GetUsers` Abra o `users-list.component.ts`, vamos começar implementando a segurança da view. Vamos precisar das seguites bibliotecas, `OnInit`, `Router` e `AuthService`.
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth.service';
+
+@Component({
+  selector: 'app-users-list',
+  templateUrl: './users-list.component.html',
+  styleUrls: ['./users-list.component.scss']
+})
+export class UsersListComponent implements OnInit {
+
+  constructor(){}
+  ngOnInit(): void {}
+
+}
+```
+Inicialmente configuramos a classe `UsersListComponent` para implementar `OnInit`, com isso podemos usar o método `ngOnInit()`, nele colocaremos a lógica caso o usuário logado não tenha a permissão para receber os dados do endpoint. Agora vamos criar as váriáveis `roles` que receberá as roles do usuário logado e `role` que receberá `GetUsers`.
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth.service';
+
+@Component({
+  selector: 'app-users-list',
+  templateUrl: './users-list.component.html',
+  styleUrls: ['./users-list.component.scss']
+})
+export class UsersListComponent implements OnInit {
+  roles: Array<string>;
+  role: string = 'GetUsers';
+
+  constructor(){}
+  ngOnInit(): void {}
+  }
+
+}
+```
+Por meio de `AuthService` vamos atribuir um *Array* de roles contidos no token do usuário autenticado. Isso será feito no `constructor` em duas etapas, a primeira será instanciando `AuthService` na variável privada `authService`, a segunda será atribuindo o valor do método `getRoles()` à variável `roles`.
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth.service';
+
+@Component({
+  selector: 'app-users-list',
+  templateUrl: './users-list.component.html',
+  styleUrls: ['./users-list.component.scss']
+})
+export class UsersListComponent implements OnInit {
+  roles: Array<string>;
+  role: string = 'GetUsers';
+
+  constructor(private authService: AuthService){
+    this.roles = authService.getRoles();
+  }
+  ngOnInit(): void {}
+
+}
+```
+Agora vamos verificar se o usuário autenticado possui a permissão de `role` em `roles`. 
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth.service';
+
+@Component({
+  selector: 'app-users-list',
+  templateUrl: './users-list.component.html',
+  styleUrls: ['./users-list.component.scss']
+})
+export class UsersListComponent implements OnInit {
+  roles: Array<string>;
+  role: string = 'GetUsers';
+
+  constructor(private authService: AuthService){
+    this.roles = authService.getRoles();
+  }
+  ngOnInit(): void {
+    if (this.roles.indexOf(this.role) === -1) {
+        // Ação caso não houver permissão para o usuário logado.
+    }
+  }
+
+}
+```
+Vamos configurar uma ação caso o usuário logado não tenha permissão de acesso. A resposta de proibição de acesso é `Forbidden - 403`, nosso projeto já tem uma rota para isso, então usaremos o `Router` para redirecionar o usuário a uma página 403. Intancie-o no `constructor` e configure a ação na linha comentada utilizando o método `navigate`.
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth.service';
+
+@Component({
+  selector: 'app-users-list',
+  templateUrl: './users-list.component.html',
+  styleUrls: ['./users-list.component.scss']
+})
+export class UsersListComponent implements OnInit {
+  roles: Array<string>;
+  role: string = 'GetUsers';
+
+  constructor(private router: Router, private authService: AuthService){
+    this.roles = authService.getRoles();
+  }
+  ngOnInit(): void {
+    if (this.roles.indexOf(this.role) === -1) {
+      this.router.navigate(['manager/403'])
+    }
+  }
+
+}
+```
+
+Apesar da rota estar protegida, sem um token válido ou usuário não ter permissão nesse endpoint, é impossível retornar os dados, mas isso gera erros que deixam o console cheio de alertas, além de deixarem a aplicação com *bugs*. Por isso é necessário verificar se o endpoint a ser consumído precisa de autenticação e se sim, configurar os passos acima.
+
+Agora que nossa rota está segura, vamos ao que interessa, a lista de usuários! Vamos começar atualizando os imports com `UsersService`e `Users`.
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth.service';
+import { UsersService } from 'src/app/users.service';
+import { User } from '../user';
+
+@Component({
+  selector: 'app-users-list',
+  templateUrl: './users-list.component.html',
+  styleUrls: ['./users-list.component.scss']
+})
+export class UsersListComponent implements OnInit {
+  roles: Array<string>;
+  role: string = 'GetUsers';
+
+  constructor(private router: Router, private authService: AuthService){
+    this.roles = authService.getRoles();
+  }
+  ngOnInit(): void {
+    if (this.roles.indexOf(this.role) === -1) {
+      this.router.navigate(['manager/403'])
+    }
+  }
+
+}
+```
+Vamos criar uma variável chamada `users` do tipo *Array* de `User` (`User[]`).
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth.service';
+import { UsersService } from 'src/app/users.service';
+import { User } from '../user';
+
+@Component({
+  selector: 'app-users-list',
+  templateUrl: './users-list.component.html',
+  styleUrls: ['./users-list.component.scss']
+})
+export class UsersListComponent implements OnInit {
+  roles: Array<string>;
+  role: string = 'GetUsers';
+  users: User[] = [];
+
+  constructor(private router: Router, private authService: AuthService){
+    this.roles = authService.getRoles();
+  }
+  ngOnInit(): void {
+    if (this.roles.indexOf(this.role) === -1) {
+      this.router.navigate(['manager/403'])
+    }
+  }
+
+}
+```
+
+Para atribuir a lista de usuários à `users`, instancie `UsersService` no `constructor` e no método `ngOnInit()` implemente `getUsers()` como mostrado abaixo.
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth.service';
+import { UsersService } from 'src/app/users.service';
+import { User } from '../user';
+
+@Component({
+  selector: 'app-users-list',
+  templateUrl: './users-list.component.html',
+  styleUrls: ['./users-list.component.scss']
+})
+export class UsersListComponent implements OnInit {
+  roles: Array<string>;
+  role: string = 'GetUsers';
+  users: User[] = [];
+
+  constructor(private router: Router, private service: UsersService, private authService: AuthService){
+    this.roles = authService.getRoles();
+  }
+  ngOnInit(): void {
+    if (this.roles.indexOf(this.role) === -1) {
+      this.router.navigate(['manager/403'])
+    }
+
+    this.service.getUsers()
+      .subscribe(resposta => this.users = resposta)
+  }
+
+}
+```
+
+Com isso já temos dados para colocar no html, abra o arquivo `users-list.component.html` e implemente o código abaixo:
+
+```html
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Users</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Users</a></li>
+            <li class="breadcrumb-item active">Users</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+
+  <section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="card bg-dark">
+
+                    <div class="card-header">
+                        <h3>Users</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">User Name</th>
+                                        <th scope="col">Full Name</th>
+                                        <th scope="col">E-mail</th>
+                                        <th scope="col">Phone Number</th>
+                                        <th scope="col">Active</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let user of users">
+                                    <tr>
+                                        <td>{{user.userName}}</td>
+                                        <td>{{user.fullName}}</td>
+                                        <td>{{user.email}}</td>
+                                        <td>{{user.phoneNumber}}</td>
+                                        <td *ngIf="user.isEnabled"><i class="fa-solid fa-square-check text-success"></i></td>
+                                        <td *ngIf="user.isEnabled === false"><i class="fa-solid fa-square-xmark text-danger"></i></td>
+                                        <td><button class="btn btn-info" routerLink="/manager/users/user/{{user.id}}">View User</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+```
+
+Perceba como implementamos o `*ngFor` na linha *41* para replicar as linhas da nossa tabela, também utilizamos a **concatenação** para acessar os dados de `user`. e nas linhas *47* e *48* usamos o `*ngIf` para condicionar a impressão da informação. Com isso já é possível entender um pouco do funcionamento do projeto **Client** e como podemos contribuir com seu desenvolvimento.
 ## Deploy
 
 #### Realizando um build com Docker
