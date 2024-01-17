@@ -21,7 +21,7 @@ namespace iVertion.Infra.IoC
             services.AddDbContext<ApplicationDbContext>(options =>
                 {
                     var host = configuration["DBHOST"] ?? "localhost";
-                    var port = configuration["DBPORT"] ?? "3305";
+                    var port = configuration["DBPORT"] ?? "3306";
                     var user = configuration["DBUSER"] ?? "root";
                     var password = configuration["DBPASSWORD"] ?? "";
  
