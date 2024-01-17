@@ -4,8 +4,17 @@
 * [Introdução](#iVertion-Palladium)
     * [Autores](#Autores)
     * [Ambiente de desenvolvimento](#Ambiente-de-desenvolvimento)
-        * [Xampp](#XAMPP)
-        * [iVertion WebApi](#iVertion-WebApi)
+        * [Windows](#Windows)
+            * [Xampp](#XAMPP)
+            * [iVertion WebApi](#iVertion-WebApi)
+                * [.NET](#.NET)
+            * [iVertion Client](#iVertion-Client)
+                * [Node JS](#Node-JS)
+                * [Angular JS](#Angular-JS)
+    * [Contribuindo](#Contribuindo)
+        * [Projeto Client](#Projeto-Client)
+    * [Deploy](#Deploy)
+            
 # iVertion-Palladium
 
 Simples, Poderoso, iVertion: O ERP da Sua Empresa.
@@ -50,7 +59,7 @@ Quando os serviços estiverem ativos, clique admin no serviço do MySql, nesse m
 No PhpMyAdmin crie um novo banco de dados com a nomeclatura *ivertion*, na codificação deixe padrão do PhpMyAdmin.
 
 
-## iVertion WebApi
+### iVertion WebApi
 O iVertion WebApi é o backend da aplicação, foi desenvolvido com .NET 6, MySql como banco de dados (opcional MariaDB).
 
 O projeto tem toda a estrutura com *Clean Architecture*, usa os padrões do *S.O.L.I.D* como princípios de boas práticas.
@@ -61,14 +70,14 @@ A documentação é gerada automaticamente pelo *Swagger*, o que facilita o ente
 
 A proposta da API é servir um ERP robusto com inúmeras opções de módulos, e o objetivo é se tornar uns dos maiores ERPs do mercado na atualidade. 
 
-### .NET
+#### .NET
 
 Para o projeto API em ambiente de desenvolvimento, vamos instalar as dependências a seguir:
 
  - Versão Atual: 6.0.418
  - [Baixe aqui](https://dotnet.microsoft.com/pt-br/download/dotnet/thank-you/sdk-6.0.418-windows-x64-installer)
 
-#### Testando a instalação:
+#### Testando a instalação do .NET:
 
 Teste a instalação do .NET com o seguinte comando:
 
@@ -78,7 +87,7 @@ dotnet --list-sdks
 
 Se a versão *6.0.418* estiver na lista, isso significa que a instalação do .NET 6 foi um sucesso.
 
-### Entity Framework Core .NET Command-line Tools 6.0.13
+#### Entity Framework Core .NET Command-line Tools 6.0.13
 
 Após a instalação do .NET 6, precisamos instalar a ferramenta do Entity Framework para habilitar as migrações de banco de dados. Para isso execute no terminal o seguinte comando. 
 
@@ -126,7 +135,7 @@ Use "dotnet ef [command] --help" for more information about a command.
 ```
 
 
-### Gerando os arquivos de migração com o Entity Framework
+#### Gerando os arquivos de migração com o Entity Framework
 
 Para gerar os arquivos de migração, vamos executar alguns passos no terminal.
 
@@ -146,7 +155,7 @@ O projeto atualiza as migrações sempre no momento da execução, nesse caso n�
 dotnet ef  database update --project iVertion.Infra.Data -s iVertion.WebApi -c ApplicationDbContext --verbose 
 ```
 
-### Executando a **API**
+#### Executando a **API**
 
 Após o ambiente de desenvolvimento do .NET configurado, vamos iniciar o projeto **API**, lembre-se de estar na raiz do projeto API para executar os comandos.
 
@@ -167,7 +176,7 @@ E por fim, vamos executar o projeto, o comando abaixo executa o projeto **API** 
 dotnet watch run --project .\iVertion.WebApi\iVertion.WebApi.csproj
 ```
 
-### Acessando a documentação da **API**.
+#### Acessando a documentação da **API**.
 
 Quando o projeto estiver executando, acesse a documentação do Swagger no link abaixo:
 
@@ -180,13 +189,13 @@ Para facilitar os testes, criamos o arquivo [iVertion.postman_collection.json](h
 Os testes podem ser executados diretamente no Swagger, mas não será possível salvar os parâmetros.
 
 
-## iVertion Client
+### iVertion Client
 
 O iVertion Client é o frontend da aplicação, desenvolvido com Angular JS.
 
 A arquitetura utilizada é MVC (Model, View, Controler) que é um padrão do Angular JS, essa camada usa alguns preceitos importantes para uma aplicação segura e ao mesmo tempo eficiente.
 
-### Node JS
+#### Node JS
 
 Realize o download da versão atual utilizada na aplicação no link a seguir:
 
@@ -222,7 +231,7 @@ Se o retorno for algo parecido com o resultado abaixo, o **npm** está ativo par
 10.1.0
 ```
 
-### Angular JS
+#### Angular JS
 
 Para instalar a versão atual do Angular JS, abra um terminal e execute o comando abaixo:
 
@@ -277,7 +286,7 @@ zone.js                         0.13.3
 Warning: The current version of Node (20.9.0) is not supported by Angular.
 ```
 
-### Instalando as dependências do projeto
+#### Instalando as dependências do projeto
 
 Agora que o ambiente de desenvolvimento Angular JS está funcionando, vamos instalar as dependências do projeto, para isso, certifique-se de estar na raiz do projeto **Client** e execute o comando abaixo:
 
@@ -285,7 +294,7 @@ Agora que o ambiente de desenvolvimento Angular JS está funcionando, vamos inst
 npm install
 ```
 
-### Executando o projeto **Client**
+#### Executando o projeto **Client**
 
 O projeto **Client** é dependente do projeto **API**, portanto, execute-o primeiro.
 
