@@ -951,7 +951,7 @@ Com isso já temos dados para colocar no html, abra o arquivo `users-list.compon
   </section>
 ```
 
-Perceba como implementamos o `*ngFor` na linha *41* para replicar as linhas da nossa tabela, também utilizamos a **concatenação** para acessar os dados de `user`. e nas linhas *47* e *48* usamos o `*ngIf` para condicionar a impressão da informação. Com isso já é possível entender um pouco do funcionamento do projeto **Client** e como podemos contribuir com seu desenvolvimento.
+Perceba como implementamos o `*ngFor` na linha *41* para replicar as linhas da nossa tabela, também utilizamos a **concatenação** para acessar os dados de `user`. Nas linhas *47* e *48* usamos o `*ngIf` para condicionar a impressão da informação e por fim o `routerLink` que também faz parte do `Router` implementado diretamente no módulo, cuida das rotas dentro do html, ou seja, não usamos mais o `href` para os links internos. Com isso já é possível entender um pouco do funcionamento do projeto **Client** e como podemos contribuir com seu desenvolvimento.
 ## Deploy
 
 #### Realizando um build com Docker
