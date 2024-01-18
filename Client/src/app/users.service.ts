@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.development';
 import { User } from './users/user';
 import { Observable } from 'rxjs';
+import { UsersProfiles } from './users/usersProfiles';
+import { UsersProfilesDbFilter } from './users/usersProfilesDbFilter';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +36,41 @@ export class UsersService {
       'Content-Type': 'application/json'
     },
   })
+  }
+
+  createUser(user: User): Observable<any>{
+    return this.http.post<any>(`${this.apiUrl}/User/CreateUser`, user,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+  }
+
+  getUsersProfiles(usersProfilesDbFilter: UsersProfilesDbFilter): Observable<UsersProfiles> {
+    let url: string = `${this.apiUrl}/User/UsersProfile?`;
+    if (usersProfilesDbFilter.name !== "") {
+      url += `&name=${usersProfilesDbFilter.name}`;
+    }
+    url += `&active=${usersProfilesDbFilter.active}`;
+    if (usersProfilesDbFilter.userId !== "") {
+      url += `&userId=${usersProfilesDbFilter.userId}`;
+    }
+    if (usersProfilesDbFilter.page > 0){
+      url += `&page=${usersProfilesDbFilter.page}`;
+    }
+    if (usersProfilesDbFilter.pageSize > 0){
+      url += `&pageSize=${usersProfilesDbFilter.pageSize}`;
+    }
+    if (usersProfilesDbFilter.orderByProperty !== "") {
+      url += `&orderByProperty=${usersProfilesDbFilter.orderByProperty}`;
+    }
+
+    return this.http.get<UsersProfiles>(url, 
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
   }
 }

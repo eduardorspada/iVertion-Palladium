@@ -1,1 +1,135 @@
-<p>create-user works!</p>
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Create User</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">User</a></li>
+            <li class="breadcrumb-item active">Create User</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+
+  <section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="card bg-dark">
+
+                    <div class="card-header">
+                        <h3>Create User</h3>
+                    </div>
+                    <div class="card-body">
+                      <div class="col-lg-12">
+                        <form #userForm="ngForm" (ngSubmit)="onSubmit()">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label for="firstName">Nome</label>
+                                        <input type="text" class="form-control" name="firstName" id="firstName" [(ngModel)]="user.firstName">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label for="lastName">Sobrenome</label>
+                                        <input type="text" class="form-control" name="lastName" id="lastName" [(ngModel)]="user.lastName">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label for="userName">Username</label>
+                                        <input type="text" class="form-control" name="userName" id="userName" [(ngModel)]="user.userName">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label for="email">E-mail</label>
+                                        <input type="text" class="form-control" name="email" id="email" [(ngModel)]="user.email">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="profilePicture">Profile Picture</label>
+                                        <input type="text" class="form-control" id="profilePicture" name="profilePicture" [(ngModel)]="user.profilePicture">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="profileCover">Profile Cover</label>
+                                        <input type="text" class="form-control" id="profileCover" name="profileCover" [(ngModel)]="user.profileCover">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="profileDescription">Profile Description</label>
+                                        <textarea name="profileDescription" id="profileDescription" cols="30" rows="5" class="form-control" [(ngModel)]="user.profileDescription"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label for="password">Senha</label>
+                                        <input type="password" name="password" id="password" class="form-control" [(ngModel)]="user.password">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label for="confirmPassword">Confirme a senha</label>
+                                        <input type="password" name="confirmPassword" id="confirmPassword" class="form-control" [(ngModel)]="user.confirmPassword">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label for="userProfileId">Perfil de usuário</label>
+                                        <select name="userProfileId" id="userProfileId" class="form-control" [(ngModel)]="user.userProfileId">
+                                            <option *ngFor="let userProfile of usersProfiles" [ngValue]="userProfile.id">{{userProfile.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1 align-self-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input bg-success" type="checkbox" [(ngModel)]="user.isEnabled" [ngModelOptions]="{standalone: true}">
+                                        <label for="active" class="form-check-label">Ativo</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <button type="submit" class="btn btn-success btn-block">
+                                        <i class="fa fa-save"></i> Save
+                                    </button>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="reset" class="btn btn-info btn-block">
+                                        <i class="fa-solid fa-arrow-rotate-left"></i> Limpar
+                                    </button>
+                                </div>
+                                <div class="col-sm-2">
+                                    <a class="btn btn-danger btn-block">
+                                        <i class="fa-regular fa-rectangle-xmark" routerLink="/manager/users/list"></i> Cancelar
+                                    </a>
+                                </div>
+
+                            </div>
+                            
+                        </form>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>

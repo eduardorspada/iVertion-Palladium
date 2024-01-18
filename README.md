@@ -513,7 +513,7 @@ Para poder acessar as variáveis de ambiente, temos o `environment` como o nome 
 
 O nosso objeto que criamos a pouco `User` servirá para tipificar nossos retornos dos métodos.
 
-E para que possamos operar de forma assícrona, temos o `Observable` que deve esperar o retorno da requisição sem bloquear o aplicativo.
+E para que possamos operar de forma assíncrona, temos o `Observable` que deve esperar o retorno da requisição sem bloquear o aplicativo.
 
 Agora vamos ver como ficou o nosso `users.service.ts`.
 
@@ -622,7 +622,7 @@ export class UsersRoutingModule { }
 
 Como falamos anteriormente, os imports vão atualizando conforme incluímos nossos objetos no código, então vamos pular essa parte e vamos editar diretamente a constante `routes`.
 
-Nosso projeto usa um template do [AdminLTE 3](https://adminlte.io/docs/3.2/), já configuramos a base do template no componente `manager`, além disso, como esses dados que vamos resgatar necessitam da autenticação, vamos usar nosso `authGuard` com a diretiva `canActivate` para inibir o acesso as rotas de pessoas não autorizadas.
+Nosso projeto usa um template do [Admin**LTE** 3](https://adminlte.io/docs/3.2/), já configuramos a base do template no componente `manager`, além disso, como esses dados que vamos resgatar necessitam da autenticação, vamos usar nosso `authGuard` com a diretiva `canActivate` para inibir o acesso as rotas de pessoas não autorizadas.
 
 ```typescript
 import { NgModule } from '@angular/core';
@@ -681,7 +681,7 @@ public async Task<ActionResult> Get()
     return Ok(users);
 }
 ```
-A role do método é `GetUsers` Abra o `users-list.component.ts`, vamos começar implementando a segurança da view. Vamos precisar das seguites bibliotecas, `OnInit`, `Router` e `AuthService`.
+A role do método é `GetUsers` Abra o `users-list.component.ts`, vamos começar implementando a segurança da view. Vamos precisar das seguintes bibliotecas, `OnInit`, `Router` e `AuthService`.
 
 ```typescript
 import { Component, OnInit } from '@angular/core';
@@ -700,7 +700,7 @@ export class UsersListComponent implements OnInit {
 
 }
 ```
-Inicialmente configuramos a classe `UsersListComponent` para implementar `OnInit`, com isso podemos usar o método `ngOnInit()`, nele colocaremos a lógica caso o usuário logado não tenha a permissão para receber os dados do endpoint. Agora vamos criar as váriáveis `roles` que receberá as roles do usuário logado e `role` que receberá `GetUsers`.
+Inicialmente configuramos a classe `UsersListComponent` para implementar `OnInit`, com isso podemos usar o método `ngOnInit()`, nele colocaremos a lógica caso o usuário logado não tenha a permissão para receber os dados do endpoint. Agora vamos criar as variáveis `roles` que receberá as roles do usuário logado e `role` que receberá `GetUsers`.
 ```typescript
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -771,7 +771,7 @@ export class UsersListComponent implements OnInit {
 
 }
 ```
-Vamos configurar uma ação caso o usuário logado não tenha permissão de acesso. A resposta de proibição de acesso é `Forbidden - 403`, nosso projeto já tem uma rota para isso, então usaremos o `Router` para redirecionar o usuário a uma página 403. Intancie-o no `constructor` e configure a ação na linha comentada utilizando o método `navigate`.
+Vamos configurar uma ação caso o usuário logado não tenha permissão de acesso. A resposta de proibição de acesso é `Forbidden - 403`, nosso projeto já tem uma rota para isso, então usaremos o `Router` para redirecionar o usuário a uma página 403. Instancie-o no `constructor` e configure a ação na linha comentada utilizando o método `navigate`.
 
 ```typescript
 import { Component, OnInit } from '@angular/core';
@@ -799,7 +799,7 @@ export class UsersListComponent implements OnInit {
 }
 ```
 
-Apesar da rota estar protegida, sem um token válido ou usuário não ter permissão nesse endpoint, é impossível retornar os dados, mas isso gera erros que deixam o console cheio de alertas, além de deixarem a aplicação com *bugs*. Por isso é necessário verificar se o endpoint a ser consumído precisa de autenticação e se sim, configurar os passos acima.
+Apesar da rota estar protegida, sem um token válido ou usuário não ter permissão nesse endpoint, é impossível retornar os dados, mas isso gera erros que deixam o console cheio de alertas, além de deixarem a aplicação com *bugs*. Por isso é necessário verificar se o endpoint a ser consumido precisa de autenticação e se sim, configurar os passos acima.
 
 Agora que nossa rota está segura, vamos ao que interessa, a lista de usuários! Vamos começar atualizando os imports com `UsersService`e `Users`.
 
@@ -961,6 +961,585 @@ Com isso já temos dados para colocar no html, abra o arquivo `users-list.compon
 ```
 
 Perceba como implementamos o `*ngFor` na linha *41* para replicar as linhas da nossa tabela, também utilizamos a **concatenação** para acessar os dados de `user`. Nas linhas *47* e *48* usamos o `*ngIf` para condicionar a impressão da informação e por fim o `routerLink` que também faz parte do `Router` implementado diretamente no módulo, cuida das rotas dentro do html, ou seja, não usamos mais o `href` para os links internos. Com isso já é possível entender um pouco do funcionamento do projeto **Client** e como podemos contribuir com seu desenvolvimento.
+
+#### Criando formulários
+
+Agora já conseguimos receber dados da **API** e imprimir na view, o próximo passo é criar e editar registros, para isso vamos incluir novos métodos no serviço de usuários.
+
+Nosso primeiro método será o `createUser()`. Seu retorno será `any`, pois apenas retorna um status code em caso de erro, porém, se sucesso, retorna o usuário criado, vamos tratar esse processo com um alerta na tela.
+
+```typescript
+createUser(user: User): Observable<any>{
+return this.http.post<any>(`${this.apiUrl}/User/CreateUser`, user,
+    {
+    headers: {
+        'Content-Type': 'application/json'
+    }
+    });
+}
+```
+
+No momento desse manual, dentre os atributos para criar um novo usuário, temos uma listagem de perfis de usuários que determina as roles, essa configuração é indispensável nesse processo, temos um endpoint na **API** responsável por retornar essa lista, então vamos criar quatro classes para esse retorno no módulo `users`.
+
+A `UserProfile` deve armazenar cada registro de perfil.
+
+```typescript
+export class UserProfile {
+    name: string;
+    description: string;
+    id: number;
+    active: boolean;
+    userId: string;
+    updatedAt: Date;
+    createdAt: Date;
+    constructor() {
+        this.name = "";
+        this.description = "";
+        this.id = 0;
+        this.active = false;
+        this.userId = "";
+        this.updatedAt = new Date();
+        this.createdAt = new Date();
+    }
+}
+```
+
+Porém nosso retorno é uma paginação da **API**, portanto não é simplesmente uma lista de `UserProfile`, ele é um dicionário de dados que precisam ser tratados. Vamos iniciar criando os parâmetros de consulta com a classe `UsersProfileDbFilter`.
+
+```typescript
+export class UsersProfilesDbFilters {
+    name: string;
+    active: boolean;
+    userId: string;
+    page: number;
+    pageSize: number;
+    orderByProperty: string;
+    constructor() {
+        this.name = "";
+        this.active = true;
+        this.userId = "";
+        this.page = 0;
+        this.pageSize = 20;
+        this.orderByProperty = "";
+    }
+}
+```
+
+Agora temos que criar os elementos que fazem a composição do nosso retorno, já temos o `UserProfile`, ele faz parte de `UsersProfilesData` e é o que vamos fazer agora.
+```typescript
+import { UserProfile } from "./userProfile";
+
+export class UsersProfilesData  {
+    totalRegister: number;
+    data: UserProfile[];
+    constructor() {
+        this.totalRegister = 0;
+        this.data = [];
+    }
+}
+```
+
+E por fim, vamos criar a classe do nosso esperado retorno. chamamos ela de `UsersProfiles` conforme abaixo.
+```typescript
+import { UsersProfilesData } from "./usersProfileData";
+
+export class UsersProfiles {
+    data: UsersProfilesData;
+    isSuccess: boolean;
+    message: string;
+    errors: string;
+    constructor() {
+        this.data = new UsersProfilesData();
+        this.isSuccess = false;
+        this.message = "";
+        this.errors = "";
+    }
+}
+```
+
+Note que criamos arquivos independentes para cada classe na raiz do módulo `users`. Isso ajuda a organizar melhor o código.
+
+Feito isso, vamos voltar ao `users.service.ts` e criar o método `getUsersProfiles`. Esse método terá como parâmetros `UsersProfileDbFilter` e retorno `UsersProfiles`.
+
+```typescript
+getUsersProfiles(usersProfilesDbFilter: UsersProfilesDbFilter): Observable<UsersProfiles> {
+let url: string = `${this.apiUrl}/User/UsersProfile?`;
+if (usersProfilesDbFilter.name !== "") {
+    url += `&name=${usersProfilesDbFilter.name}`;
+}
+url += `&active=${usersProfilesDbFilter.active}`;
+if (usersProfilesDbFilter.userId !== "") {
+    url += `&userId=${usersProfilesDbFilter.userId}`;
+}
+if (usersProfilesDbFilter.page > 0){
+    url += `&page=${usersProfilesDbFilter.page}`;
+}
+if (usersProfilesDbFilter.pageSize > 0){
+    url += `&pageSize=${usersProfilesDbFilter.pageSize}`;
+}
+if (usersProfilesDbFilter.orderByProperty !== "") {
+    url += `&orderByProperty=${usersProfilesDbFilter.orderByProperty}`;
+}
+
+return this.http.get<UsersProfiles>(url, 
+    {
+    headers: {
+        'Content-Type': 'application/json'
+    }
+    });
+}
+```
+
+Crie um novo componente em `users` chamado `create-user` usando o comando a seguir:
+
+```bash
+npx ng g c users/create-user
+```
+
+O Primeiro passo é configurar a segurança da view, é o mesmo procedimento que fizemos no tutorial anterior. Para criar usuários a role é `AddUser`, para obter as roles usamos `AddToRole`. Então vamos modificar apenas um pouco a lógica. A variável `role` receberá um *Array* de *string* o qual iremos percorrer e verificar ambos, caso um deles não perteçam a `roles`, o usuário será redirecionado para a página de Forbidden.
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth.service';
+
+@Component({
+  selector: 'app-create-user',
+  templateUrl: './create-user.component.html',
+  styleUrls: ['./create-user.component.scss']
+})
+export class CreateUserComponent implements OnInit {
+  roles: Array<string>;
+  role: Array<string> = ['AddUser', 'AddToRole'];
+  constructor(private router: Router,  private authService: AuthService) {
+    this.roles = this.authService.getRoles();
+  }
+  ngOnInit(): void {
+    for (let i in this.role) {
+      if (this.roles.indexOf(this.role[i]) === -1) {
+        this.router.navigate(['manager/403'])
+      }
+    }
+  }
+
+}
+```
+
+Antes de criar nosso formulário, precisamos instanciar um novo usuário, assim já montamos uma lógica para não quebrar nosso código enquanto criamos os *inputs*.
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth.service';
+import { User } from '../user';
+import { UsersService } from 'src/app/users.service';
+import Swal from 'sweetalert2'
+
+@Component({
+  selector: 'app-create-user',
+  templateUrl: './create-user.component.html',
+  styleUrls: ['./create-user.component.scss']
+})
+
+export class CreateUserComponent implements OnInit {
+  roles: Array<string>;
+  role: Array<string> = ['AddUser', 'AddToRole'];
+  user: User = new User();
+
+  constructor(private router: Router,  private authService: AuthService, private userService: UsersService) {
+    this.roles = this.authService.getRoles();
+  }
+
+  ngOnInit(): void {
+    for (let i in this.role) {
+      if (this.roles.indexOf(this.role[i]) === -1) {
+        this.router.navigate(['manager/403'])
+      }
+    }
+  }
+  onSubmit() {
+    this.userService.createUser(this.user).subscribe(
+      (value) =>
+       {
+        console.log('Observable emitted the next value: ' + value);
+      },
+      (err) => {
+        console.error('Observable emitted an error: ' + err);
+        if (err.status === 400) {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "error",
+            title: err.error.error
+          });
+        } else {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "success",
+            title: "User created successfully!"
+          });
+          this.router.navigate(['manager/users/list'])
+        }
+      },
+      () =>  { 
+        console.log('Observable emitted the complete notification');
+      }
+      
+    );
+
+  }
+
+}
+
+```
+Nossa base de *html* das views é simplesmente isso, a partir desse ponto vamos criar todas as telas do ambiente administrativo.
+
+```html
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Create User</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">User</a></li>
+            <li class="breadcrumb-item active">Create User</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+
+  <section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="card bg-dark">
+
+                    <div class="card-header">
+                        <h3>Create User</h3>
+                    </div>
+                    <div class="card-body">
+                      <div class="col-lg-12">
+                            <!--
+                                Nosso conteúdo
+                            -->
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+```
+
+No local reservado para nosso conteúdo vamos criar nosso formulário. Use a seguinte sintaxe:
+
+```html
+<form #userForm="ngForm" (ngSubmit)="onSubmit()">
+
+</form>
+```
+
+Começamos a criar nossos primeiros campos, conforme mostrado abaixo:
+
+```html
+<form #userForm="ngForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="firstName">Nome</label>
+                <input type="text" class="form-control" name="firstName" id="firstName" [(ngModel)]="user.firstName">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="lastName">Sobrenome</label>
+                <input type="text" class="form-control" name="lastName" id="lastName" [(ngModel)]="user.lastName">
+            </div>
+        </div>
+    </div>
+</form>
+```
+Note que os campos estão vazios, esse é o esperado.
+![App Screenshot](Img/formulario-01.png)
+
+Mas para que possamos verificar se os dados correspondem ao que queremos trabalhar, vamos criar dados fictícios para o `user`.
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth.service';
+import { User } from '../user';
+import { UsersService } from 'src/app/users.service';
+import Swal from 'sweetalert2'
+
+@Component({
+  selector: 'app-create-user',
+  templateUrl: './create-user.component.html',
+  styleUrls: ['./create-user.component.scss']
+})
+
+export class CreateUserComponent implements OnInit {
+  roles: Array<string>;
+  role: Array<string> = ['AddUser', 'AddToRole'];
+  user: User = new User();
+
+  constructor(private router: Router,  private authService: AuthService, private userService: UsersService) {
+    this.roles = this.authService.getRoles();
+    // remover após o teste
+    this.user.userName = 'john.doe@example.com';
+    this.user.firstName = 'John';
+    this.user.lastName = 'Doe';
+    this.user.email = 'john.doe@example.com';
+    this.user.isEnabled = true;
+    this.user.profilePicture = 'http://example.com/user-profile.png';
+    this.user.profileCover = 'http://example.com/user-profile-cover.png';
+    this.user.profileDescription = 'John Doe is a systems analyst of Microsoft Azure';
+    this.user.occupation = 'Systems Analyst';
+    this.user.birthday = new Date('1995-12-17T03:24:00');
+    this.user.phoneNumber = '+1 408 212 5653';
+    this.user.password = 'MdRPgW/*-2023'
+    this.user.confirmPassword = 'MdRPgW/*-2023'
+    this.user.userProfileId = 1
+    // fim remover
+  }
+
+  ngOnInit(): void {
+    for (let i in this.role) {
+      if (this.roles.indexOf(this.role[i]) === -1) {
+        this.router.navigate(['manager/403'])
+      }
+    }
+  }
+  onSubmit() {
+    this.userService.createUser(this.user).subscribe(
+      (value) =>
+       {
+        console.log('Observable emitted the next value: ' + value);
+      },
+      (err) => {
+        console.error('Observable emitted an error: ' + err);
+        if (err.status === 400) {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "error",
+            title: err.error.error
+          });
+        } else {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "success",
+            title: "User created successfully!"
+          });
+          this.router.navigate(['manager/users/list'])
+        }
+      },
+      () =>  { 
+        console.log('Observable emitted the complete notification');
+      }
+      
+    );
+
+  }
+
+}
+
+
+
+```
+
+Nesse momento nosso formulário está assim:
+
+```html
+<form #userForm="ngForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="form-group">
+                <label for="firstName">Nome</label>
+                <input type="text" class="form-control" name="firstName" id="firstName" [(ngModel)]="user.firstName">
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                <label for="lastName">Sobrenome</label>
+                <input type="text" class="form-control" name="lastName" id="lastName" [(ngModel)]="user.lastName">
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                <label for="userName">Username</label>
+                <input type="text" class="form-control" name="userName" id="userName" [(ngModel)]="user.userName">
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="text" class="form-control" name="email" id="email" [(ngModel)]="user.email">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label for="profilePicture">Profile Picture</label>
+                <input type="text" class="form-control" id="profilePicture" name="profilePicture" [(ngModel)]="user.profilePicture">
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label for="profileCover">Profile Cover</label>
+                <input type="text" class="form-control" id="profileCover" name="profileCover" [(ngModel)]="user.profileCover">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="form-group">
+                <label for="profileDescription">Profile Description</label>
+                <textarea name="profileDescription" id="profileDescription" cols="30" rows="5" class="form-control" [(ngModel)]="user.profileDescription"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" name="password" id="password" class="form-control" [(ngModel)]="user.password">
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                <label for="confirmPassword">Confirme a senha</label>
+                <input type="password" name="confirmPassword" id="confirmPassword" class="form-control" [(ngModel)]="user.confirmPassword">
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                <label for="userProfileId">Perfil de usuário</label>
+                <select name="userProfileId" id="userProfileId" class="form-control" [(ngModel)]="user.userProfileId">
+                    <option [ngValue]="1">Administrator</option>
+                    <option [ngValue]="2">Author</option>
+                    <option [ngValue]="3">Ticketer</option>
+                    <option [ngValue]="4">Totem</option>
+                    <option [ngValue]="5">Users</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-1 align-self-center">
+            <div class="form-check">
+                <input class="form-check-input bg-success" type="checkbox" [(ngModel)]="user.isEnabled" [ngModelOptions]="{standalone: true}">
+                <label for="active" class="form-check-label">Ativo</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-3">
+            <button type="submit" class="btn btn-success btn-block">
+                <i class="fa fa-save"></i> Save
+            </button>
+        </div>
+        <div class="col-sm-2">
+            <button type="reset" class="btn btn-info btn-block">
+                <i class="fa-solid fa-arrow-rotate-left"></i> Limpar
+            </button>
+        </div>
+        <div class="col-sm-2">
+            <a class="btn btn-danger btn-block">
+                <i class="fa-regular fa-rectangle-xmark" routerLink="/manager/users/list"></i> Cancelar
+            </a>
+        </div>
+
+    </div>
+    
+</form>
+```
+Já é possível testar a inclusão de usuários, quando houver erros, o sistema emitirá um alerta com a resposta da **API**. E quando for sucesso, haverá uma mensagem de sucesso e o `Router` redirecionara para a lista de usuários. Nós não adicionamos todos os campos aqui no tutorial, mas fica de tarefa de casa, use a documentação acima e do [Admin**LTE** 3](https://adminlte.io/docs/3.2/) para completar conforme sentir a vontade. 
+
+Mas você lembra que fizemos um método para buscar os perfis de usuários? Nosso formulário ainda contém um select estático com os valores que temos pré-cadastrados no banco de dados, mas como podemos ter mudanças desses elementos futuramente, vamos usar nosso método para popular esse select.
+
+Crie as seguintes variáveis logo após `user`:
+
+```typescript
+usersProfilesResponse: any;
+usersProfiles: UserProfile[] = [];
+usersProfilesDbFilter: UsersProfilesDbFilter = new UsersProfilesDbFilter();
+```
+
+Vamos falar um pouco delas. Typescript como já diz o nome é *tipado*, isso significa que nossos objetos precisam ter um tipo pré-determinado. A variável `usersProfilesResponse` pode receber mais de um tipo de valor, pois em caso de erro na requisição, a resposta não será um `UserProfiles`, mas a ideia é receber ele, como não temos essa certeza, *tipamos* ele com `any`. Já `usersProfiles`será um *array* de `UserProfile`, nele vamos armazenar nossa lista de perfis. E por fim, `usersProfilesDbFilter` que é o parâmetro do método `getUsersProfiles()`, declaramos como um novo `UsersProfilesDbFilter`.
+
+Agora vamos trabalhar `usersProfilesDbFilter` e `usersProfiles` dentro do construtor.
+
+```typescript
+this.usersProfilesDbFilter.pageSize = 1000
+this.usersProfilesResponse = this.userService.getUsersProfiles(this.usersProfilesDbFilter).subscribe(
+    (value) => {
+    console.log(value);
+    this.usersProfiles = value.data.data;
+    console.log(this.usersProfiles);
+    },
+);
+```
+O método `getUsersProfiles()` retorna uma paginação de perfis de usuários, isso será muito útil quando desenvolvermos a view de perfis, mas no momento nosso objetivo é apenas listar elas e por esse motivo definimos a propriedade `pageSize` como 1000, esperamos que o uso desses perfis não ultrapassem esse valor, isso seria muito incomum no uso do sistema.
+
+Atribuímos o valor de `value.data.data` em `usersProfiles`, com isso temos um *array* de perfis pronto para o nosso select.
+
+Vamos usar o `*ngFor` para popular os options.
+
+```html
+<div class="form-group">
+    <label for="userProfileId">Perfil de usuário</label>
+    <select name="userProfileId" id="userProfileId" class="form-control" [(ngModel)]="user.userProfileId">
+        <option *ngFor="let userProfile of usersProfiles" [ngValue]="userProfile.id">{{userProfile.name}}</option>
+    </select>
+</div>
+```
+Agora, podemos alterar tranquilamente nossa base de perfis, as alterações serão refletidas instantaneamente na criação de usuários. Agora uma boa prática para isso é criar uma base para *occupation* e popular em um select. 
+
+Acreditamos que nosso tutorial ajude a contribuir com o projeto, mas lembre-se que programação não é como uma receita exata, você encontrará obstáculos no caminho, erros e bugs diversos. Não desanime, use de recursos e documentações adicionais para conseguir seus resultados. Eu mesmo consultei o [ChatGPT](https://chat.openai.com/) inúmeras vezes para criar essa documentação. Boa sorte! "E que a força esteja com você!"
 ## Deploy
 
 #### Realizando um build com Docker

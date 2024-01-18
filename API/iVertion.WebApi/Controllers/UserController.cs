@@ -108,7 +108,7 @@ namespace iVertion.WebApi.Controllers
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Invalid Login Attempt.");
+                ModelState.AddModelError("error", "We had a problem compiling the data.");
                 return BadRequest(ModelState);
             }
         }

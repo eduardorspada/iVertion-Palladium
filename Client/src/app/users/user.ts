@@ -14,6 +14,7 @@ export class User {
     occupation: string;
     birthday: Date;
     phoneNumber: string;
+    userProfileId: number;
 
     constructor (){
         this.id = "";
@@ -31,5 +32,6 @@ export class User {
         this.occupation = "";
         this.birthday = new Date();
         this.phoneNumber = "";
+        this.userProfileId = 0;
     }
 }
