@@ -10,7 +10,7 @@
                 * [.NET](#.NET)
             * [iVertion Client](#iVertion-Client)
                 * [Node JS](#Node-JS)
-                * [Angular JS](#Angular-JS)
+                * [Angular](#Angular)
     * [Contribuindo](#Contribuindo)
         * [Projeto Client](#Projeto-Client)
     * [Deploy](#Deploy)
@@ -191,9 +191,9 @@ Os testes podem ser executados diretamente no Swagger, mas não será possível 
 
 ### iVertion Client
 
-O iVertion Client é o frontend da aplicação, desenvolvido com Angular JS.
+O iVertion Client é o frontend da aplicação, desenvolvido com Angular.
 
-A arquitetura utilizada é MVC (Model, View, Controler) que é um padrão do Angular JS, essa camada usa alguns preceitos importantes para uma aplicação segura e ao mesmo tempo eficiente.
+A arquitetura utilizada é MVC (Model, View, Controler) que é um padrão do Angular, essa camada usa alguns preceitos importantes para uma aplicação segura e ao mesmo tempo eficiente.
 
 #### Node JS
 
@@ -231,9 +231,9 @@ Se o retorno for algo parecido com o resultado abaixo, o **npm** está ativo par
 10.1.0
 ```
 
-#### Angular JS
+#### Angular
 
-Para instalar a versão atual do Angular JS, abra um terminal e execute o comando abaixo:
+Para instalar a versão atual do Angular, abra um terminal e execute o comando abaixo:
 
 ```bash
 npm install -g @angular/cli@16.2.10
@@ -288,7 +288,7 @@ Warning: The current version of Node (20.9.0) is not supported by Angular.
 
 #### Instalando as dependências do projeto
 
-Agora que o ambiente de desenvolvimento Angular JS está funcionando, vamos instalar as dependências do projeto, para isso, certifique-se de estar na raiz do projeto **Client** e execute o comando abaixo:
+Agora que o ambiente de desenvolvimento Angular está funcionando, vamos instalar as dependências do projeto, para isso, certifique-se de estar na raiz do projeto **Client** e execute o comando abaixo:
 
 ```bash
 npm install
@@ -343,7 +343,7 @@ Exemplo:
 </div>
 ```
 
-- ***Two Way Data Binding*** - Esse é um conceito central no AngularJS, onde as alterações feitas no modelo são refletidas automaticamente na visão e vice-versa, eliminando a necessidade de manipulação manual do DOM. A sintaxe utilizada será `[(ngModel)]="model.data"` onde `model` é o objeto da view e `data` trata-se da propriedade a ser disponibilizada. `ngModel` é uma palavra reservada do *Angular JS*.
+- ***Two Way Data Binding*** - Esse é um conceito central no AngularJS, onde as alterações feitas no modelo são refletidas automaticamente na visão e vice-versa, eliminando a necessidade de manipulação manual do DOM. A sintaxe utilizada será `[(ngModel)]="model.data"` onde `model` é o objeto da view e `data` trata-se da propriedade a ser disponibilizada. `ngModel` é uma palavra reservada do *Angular*.
 
 Exemplo:
 
@@ -361,7 +361,7 @@ Exemplo:
 
 #### Criando views
 
-O *Angular JS* é modular, isso significa que as views são componentes que podem ou não fazer parte de um módulo criado pelo desenvolvedor, quando não fazem parde de um módulo criado pelo desenvolvedor, quando não, farão parte do `app.module.ts` que é o módulo principal do projeto.
+O *Angular* é modular, isso significa que as views são componentes que podem ou não fazer parte de um módulo criado pelo desenvolvedor, quando não fazem parde de um módulo criado pelo desenvolvedor, quando não, farão parte do `app.module.ts` que é o módulo principal do projeto.
 
 Para criar um módulo usaremos o comando a seguir:
 
