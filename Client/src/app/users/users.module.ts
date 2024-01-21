@@ -18,6 +18,7 @@ import { UpdateUserProfileDescriptionComponent } from './update-user-profile-des
 import { UpdateUserOccupationComponent } from './update-user-occupation/update-user-occupation.component';
 import { UpdateUserBirthdayComponent } from './update-user-birthday/update-user-birthday.component';
 import { UserRolesComponent } from './user-roles/user-roles.component';
+import { UsersProfilesListComponent } from './users-profiles-list/users-profiles-list.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { UserRolesComponent } from './user-roles/user-roles.component';
     UpdateUserProfileDescriptionComponent,
     UpdateUserOccupationComponent,
     UpdateUserBirthdayComponent,
-    UserRolesComponent
+    UserRolesComponent,
+    UsersProfilesListComponent
   ],
   imports: [
     CommonModule,

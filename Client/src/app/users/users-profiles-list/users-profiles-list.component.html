@@ -1,0 +1,159 @@
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Users Profiles</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">User</a></li>
+            <li class="breadcrumb-item active">Users Profiles</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+
+  <section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="card bg-dark">
+
+                    <div class="card-header">
+                        <h3>Users Profiles</h3>
+                    </div>
+                    <div class="card-body">
+                      <div class="col-lg-12">
+
+                        <div class="row">
+
+                            <form class="form-horizontal">
+                                <div class="row">
+    
+                                    <div class="col-lg-6">
+                                        <div class="form-group row">
+                                            <label for="name" class="col-sm-2 col-form-label">Name</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" id="name" name="name" [(ngModel)]="usersProfilesDbFilter.name" (ngModelChange)="onChange();">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group row">
+                                            <label for="active" class="col-sm-2 col-form-label">Active</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" id="active" name="active" [(ngModel)]="usersProfilesDbFilter.active" (ngModelChange)="onChange();">
+                                                    <option [ngValue]="true">Ativos</option>
+                                                    <option [ngValue]="false">Desativados</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group row">
+                                            <label for="userId" class="col-sm-2 col-form-label">User</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" id="userId" name="userId" [(ngModel)]="usersProfilesDbFilter.userId" (ngModelChange)="onChange();">
+                                                    <option *ngFor="let user of users" [ngValue]="user.id">{{user.fullName}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-lg-6">
+                                        <div class="form-group row">
+                                            <label for="page" class="col-sm-2 col-form-label">Page</label>
+                                            <div class="col-sm-6">
+                                                <input type="number" class="form-control" id="page" name="page" [(ngModel)]="usersProfilesDbFilter.page" (ngModelChange)="onChange();">
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <div class="col-lg-6">
+                                        <div class="form-group row">
+                                            <label for="pageSize" class="col-sm-2 col-form-label">Page Size</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" id="pageSize" name="pageSize" [(ngModel)]="usersProfilesDbFilter.pageSize" (ngModelChange)="onChange();">
+                                                    <option [ngValue]="5">5</option>
+                                                    <option [ngValue]="10">10</option>
+                                                    <option [ngValue]="20">20</option>
+                                                    <option [ngValue]="50">50</option>
+                                                    <option [ngValue]="100">100</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group row">
+                                            <label for="orderByProperty" class="col-sm-2 col-form-label">Order By</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" id="orderByProperty" name="orderByProperty" [(ngModel)]="usersProfilesDbFilter.orderByProperty" (ngModelChange)="onChange();">
+                                                    <option>Id</option>
+                                                    <option>Name</option>
+                                                    <option>Description</option>
+                                                    <option>Active</option>
+                                                    <option>UserId</option>
+                                                    <option>CreatedAt</option>
+                                                    <option>UpdatedAt</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                            </form>
+
+                        </div>
+                        <div class="row">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Id</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Active</th>
+                                            <th scope="col">User</th>
+                                            <th scope="col">Created At</th>
+                                            <th scope="col">Updated At</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody *ngFor="let userProfile of usersProfiles">
+                                        <tr>
+                                            <td>{{userProfile.id}}</td>
+                                            <td>{{userProfile.name}}</td>
+                                            <td>{{userProfile.description}}</td>
+                                            <td *ngIf="userProfile.active"><i class="fa-solid fa-square-check text-success"></i></td>
+                                            <td *ngIf="userProfile.active === false"><i class="fa-solid fa-square-xmark text-danger"></i></td>
+                                            <td>#####</td>
+                                            <td>{{userProfile.createdAt}}</td>
+                                            <td>{{userProfile.updatedAt}}</td>
+                                            <td><button class="btn btn-info" routerLink="/manager/users/user-profile/{{userProfile.id}}">View User Profile</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                   <!-- Botão Anterior -->
+                   <ul *ngIf="totalPages > 1">
+                    <li *ngFor="let page of pagesArray">
+                      <button (click)="changePage(page)">{{ page }}</button>
+                    </li>
+                  </ul>
+                  
+                              
+
+                        </div>
+
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>

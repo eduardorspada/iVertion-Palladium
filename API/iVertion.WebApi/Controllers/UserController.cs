@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using iVertion.Application.Interfaces;
 using iVertion.Domain.FiltersDb;
+using iVertion.Application.DTOs;
 
 namespace iVertion.WebApi.Controllers
 {
@@ -177,6 +178,29 @@ namespace iVertion.WebApi.Controllers
         public async Task<ActionResult> GetUserRolesAsync(string userName){
             var roles = await _userService.GetUserRolesAsync(userName);
             return Ok(roles);
+        }
+        /// <summary>
+        /// Creates a new user role profile
+        /// </summary>
+        /// <param name="userProfileModel"></param>
+        /// <returns></returns>
+        [HttpPost("AddUserRoleProfile")]
+        [Authorize(Roles = "AddToRole")]
+        public async Task<ActionResult> AddUserRoleAsync([FromBody] UserProfileModel userProfileModel){
+            if (userProfileModel == null)
+                return BadRequest("The role profile model not be null!");
+            var userProfileDto = new UserProfileDTO();
+            var userId = User.FindFirst("UId").Value;
+            var dateNow = DateTime.UtcNow;
+            userProfileDto.Name = userProfileModel.Name;
+            userProfileDto.Description = userProfileModel.Description;
+            userProfileDto.Active = userProfileModel.Active;
+            userProfileDto.CreatedAt = dateNow;
+            userProfileDto.UpdatedAt = dateNow;
+            userProfileDto.UserId = userId;
+            await _userProfileService.CreateUserProfileAsync(userProfileDto);
+            return Ok(userProfileDto);
+            
         }
         /// <summary>
         /// Adds a user to a given rule from the "roleModel" properties.

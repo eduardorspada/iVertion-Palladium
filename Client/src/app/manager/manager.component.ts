@@ -12,6 +12,6 @@ export class ManagerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.document.body.classList.add('hold-transition', 'dark-mode', 'sidebar-mini', 'layout-fixed', 'layout-navbar-fixed', 'layout-footer-fixed', 'sidebar-collapse')
+    this.document.body.classList.add('hold-transition', 'sidebar-mini', 'layout-fixed', 'layout-navbar-fixed', 'layout-footer-fixed', 'sidebar-collapse')
   }
 }

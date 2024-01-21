@@ -9,7 +9,7 @@ export class UsersProfilesDbFilter {
         this.name = "";
         this.active = true;
         this.userId = "";
-        this.page = 0;
+        this.page = 1;
         this.pageSize = 20;
         this.orderByProperty = "";
     }

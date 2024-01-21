@@ -146,6 +146,13 @@
             <param name="userName"></param>
             <returns></returns>
         </member>
+        <member name="M:iVertion.WebApi.Controllers.UserController.AddUserRoleAsync(iVertion.WebApi.Models.UserProfileModel)">
+            <summary>
+            Creates a new user role profile
+            </summary>
+            <param name="userProfileModel"></param>
+            <returns></returns>
+        </member>
         <member name="M:iVertion.WebApi.Controllers.UserController.AddRole(iVertion.WebApi.Models.RoleModel)">
             <summary>
             Adds a user to a given rule from the "roleModel" properties.

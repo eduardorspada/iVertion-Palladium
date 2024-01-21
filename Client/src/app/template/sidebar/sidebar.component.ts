@@ -135,9 +135,9 @@ export class SidebarComponent implements OnInit { //terminar
             role: "GetUsers",
           },
           {
-            name: "Users Roles",
+            name: "Users Profiles",
             iconClasses: ["nav-icon", "fa-solid", "fa-person-military-pointing"],
-            path: ["/manager/users/list"],
+            path: ["/manager/users/users-profile-list"],
             event: "",
             type: "children",
             active: false,
