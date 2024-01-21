@@ -6,6 +6,7 @@ import { UsersService } from 'src/app/users.service';
 import Swal from 'sweetalert2'
 import { UsersProfilesDbFilter } from '../usersProfilesDbFilter';
 import { UserProfile } from '../userProfile';
+import { UsersProfiles } from '../usersProfiles';
 
 @Component({
   selector: 'app-create-user',
@@ -17,14 +18,13 @@ export class CreateUserComponent implements OnInit {
   roles: Array<string>;
   role: Array<string> = ['AddUser', 'AddToRole'];
   user: User = new User();
-  usersProfilesResponse: any;
   usersProfiles: UserProfile[] = [];
   usersProfilesDbFilter: UsersProfilesDbFilter = new UsersProfilesDbFilter();
 
   constructor(private router: Router,  private authService: AuthService, private userService: UsersService) {
     this.roles = this.authService.getRoles();
     this.usersProfilesDbFilter.pageSize = 1000
-    this.usersProfilesResponse = this.userService.getUsersProfiles(this.usersProfilesDbFilter).subscribe(
+    this.userService.getUsersProfiles(this.usersProfilesDbFilter).subscribe(
       (value) => {
         console.log(value);
         this.usersProfiles = value.data.data;

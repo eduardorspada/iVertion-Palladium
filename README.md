@@ -1039,7 +1039,7 @@ export class UsersProfilesData  {
 }
 ```
 
-E por fim, vamos criar a classe do nosso esperado retorno. chamamos ela de `UsersProfiles` conforme abaixo.
+E por fim, vamos criar a classe do nosso esperado retorno. chamamos ela de `UsersProfiles` conforme abaixo. Não iremos usar ela no momento, mas guarde isso para o nosso próximo tutorial que tratará da paginação desses elementos.
 ```typescript
 import { UsersProfilesData } from "./usersProfileData";
 
@@ -1504,23 +1504,21 @@ Mas você lembra que fizemos um método para buscar os perfis de usuários? Noss
 Crie as seguintes variáveis logo após `user`:
 
 ```typescript
-usersProfilesResponse: any;
-usersProfiles: UserProfile[] = [];
-usersProfilesDbFilter: UsersProfilesDbFilter = new UsersProfilesDbFilter();
+  usersProfiles: UserProfile[] = [];
+  usersProfilesDbFilter: UsersProfilesDbFilter = new UsersProfilesDbFilter();
 ```
 
-Vamos falar um pouco delas. Typescript como já diz o nome é *tipado*, isso significa que nossos objetos precisam ter um tipo pré-determinado. A variável `usersProfilesResponse` pode receber mais de um tipo de valor, pois em caso de erro na requisição, a resposta não será um `UserProfiles`, mas a ideia é receber ele, como não temos essa certeza, *tipamos* ele com `any`. Já `usersProfiles`será um *array* de `UserProfile`, nele vamos armazenar nossa lista de perfis. E por fim, `usersProfilesDbFilter` que é o parâmetro do método `getUsersProfiles()`, declaramos como um novo `UsersProfilesDbFilter`.
+Vamos falar um pouco delas. Typescript como já diz o nome é *tipado*, isso significa que nossos objetos precisam ter um tipo pré-determinado.. Já `usersProfiles`será um *array* de `UserProfile`, nele vamos armazenar nossa lista de perfis. E por fim, `usersProfilesDbFilter` que é o parâmetro do método `getUsersProfiles()`, declaramos como um novo `UsersProfilesDbFilter`. Note que para as variáveis que recebem uma classe como tipo, são tipos customizados, sempre prefira essa prática ao uso do `any`, isso pode evitar erros na compiação ou em produção, visto que esse tipo genérico desativa o *typecheck* das variáveis. 
 
 Agora vamos trabalhar `usersProfilesDbFilter` e `usersProfiles` dentro do construtor.
 
 ```typescript
 this.usersProfilesDbFilter.pageSize = 1000
-this.usersProfilesResponse = this.userService.getUsersProfiles(this.usersProfilesDbFilter).subscribe(
-    (value) => {
+this.userService.getUsersProfiles(this.usersProfilesDbFilter).subscribe(
+  (value) => {
     console.log(value);
     this.usersProfiles = value.data.data;
-    console.log(this.usersProfiles);
-    },
+  },
 );
 ```
 O método `getUsersProfiles()` retorna uma paginação de perfis de usuários, isso será muito útil quando desenvolvermos a view de perfis, mas no momento nosso objetivo é apenas listar elas e por esse motivo definimos a propriedade `pageSize` como 1000, esperamos que o uso desses perfis não ultrapassem esse valor, isso seria muito incomum no uso do sistema.
