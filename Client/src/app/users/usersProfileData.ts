@@ -1,10 +1,10 @@
 import { UserProfile } from "./userProfile";
 
 export class UsersProfilesData  {
-    totalRegister: number;
+    totalRegisters: number;
     data: UserProfile[];
     constructor() {
-        this.totalRegister = 0;
+        this.totalRegisters = 0;
         this.data = [];
     }
 }

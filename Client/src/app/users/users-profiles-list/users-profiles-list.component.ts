@@ -5,7 +5,6 @@ import { UsersProfilesDbFilter } from '../usersProfilesDbFilter';
 import { User } from '../user';
 import { UsersService } from 'src/app/users.service';
 import { UserProfile } from '../userProfile';
-import { UsersProfilesData } from '../usersProfileData';
 import { UsersProfiles } from '../usersProfiles';
 
 @Component({
@@ -42,7 +41,7 @@ export class UsersProfilesListComponent implements OnInit {
     }
     this.activatedRoute.queryParams.subscribe(params => {
       this.usersProfilesDbFilter = { ...this.usersProfilesDbFilter, ...params };
-      this.onChange();
+      this.reLoadQuery();
     });
   }
 
@@ -51,17 +50,10 @@ export class UsersProfilesListComponent implements OnInit {
   }
 
   updateTotalPages(): void {
-    this.totalPages = Math.ceil(this.usersProfilesResponse.data.totalRegister / this.usersProfilesDbFilter.pageSize);
+    this.totalPages = Math.ceil(this.usersProfilesResponse.data.totalRegisters / this.usersProfilesDbFilter.pageSize);
   }
 
-  changePage(newPage: number): void {
-    if (newPage >= 1 && newPage <= this.totalPages) {
-      this.usersProfilesDbFilter.page = newPage;
-      this.onChange();
-    }
-  }
-
-  onChange(): void {
+  reLoadQuery(): void {
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
       queryParams: { ...this.usersProfilesDbFilter },
@@ -75,5 +67,30 @@ export class UsersProfilesListComponent implements OnInit {
         this.pagesArray = this.getPagesArray();
       },
     );
+  }
+
+  changePage(direction: string): void {
+    if (direction === '+' && this.usersProfilesDbFilter.page < this.totalPages) {
+      this.usersProfilesDbFilter.page++;
+    } else if (direction === '-' && this.usersProfilesDbFilter.page >= 1){
+      this.usersProfilesDbFilter.page--
+    }
+
+    if (this.usersProfilesDbFilter.page >= 1 && this.usersProfilesDbFilter.page <= this.totalPages) {
+      this.reLoadQuery();
+    }
+  }
+
+  changeToPage(page: number): void {
+    page++;
+    if (page >= 1 && page <= this.totalPages) {
+      this.usersProfilesDbFilter.page = page;
+      this.reLoadQuery();
+    }
+  }
+
+  onChange(): void {
+    this.usersProfilesDbFilter.page = 1;
+    this.reLoadQuery();
   }
 }
