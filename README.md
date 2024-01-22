@@ -10,7 +10,7 @@
                 * [.NET](#.NET)
             * [iVertion Client](#iVertion-Client)
                 * [Node JS](#Node-JS)
-                * [Angular](#Angular)
+                * [Angular JS](#Angular-JS)
     * [Contribuindo](#Contribuindo)
         * [Projeto Client](#Projeto-Client)
     * [Deploy](#Deploy)
@@ -191,9 +191,9 @@ Os testes podem ser executados diretamente no Swagger, mas não será possível 
 
 ### iVertion Client
 
-O iVertion Client é o frontend da aplicação, desenvolvido com Angular.
+O iVertion Client é o frontend da aplicação, desenvolvido com Angular JS.
 
-A arquitetura utilizada é MVC (Model, View, Controler) que é um padrão do Angular, essa camada usa alguns preceitos importantes para uma aplicação segura e ao mesmo tempo eficiente.
+A arquitetura utilizada é MVC (Model, View, Controler) que é um padrão do Angular JS, essa camada usa alguns preceitos importantes para uma aplicação segura e ao mesmo tempo eficiente.
 
 #### Node JS
 
@@ -231,9 +231,9 @@ Se o retorno for algo parecido com o resultado abaixo, o **npm** está ativo par
 10.1.0
 ```
 
-#### Angular
+#### Angular JS
 
-Para instalar a versão atual do Angular, abra um terminal e execute o comando abaixo:
+Para instalar a versão atual do Angular JS, abra um terminal e execute o comando abaixo:
 
 ```bash
 npm install -g @angular/cli@16.2.10
@@ -288,7 +288,7 @@ Warning: The current version of Node (20.9.0) is not supported by Angular.
 
 #### Instalando as dependências do projeto
 
-Agora que o ambiente de desenvolvimento Angular está funcionando, vamos instalar as dependências do projeto, para isso, certifique-se de estar na raiz do projeto **Client** e execute o comando abaixo:
+Agora que o ambiente de desenvolvimento Angular JS está funcionando, vamos instalar as dependências do projeto, para isso, certifique-se de estar na raiz do projeto **Client** e execute o comando abaixo:
 
 ```bash
 npm install
@@ -1096,7 +1096,7 @@ Crie um novo componente em `users` chamado `create-user` usando o comando a segu
 npx ng g c users/create-user
 ```
 
-O Primeiro passo é configurar a segurança da view, é o mesmo procedimento que fizemos no tutorial anterior. Para criar usuários a role é `AddUser`, para obter as roles usamos `AddToRole`. Então vamos modificar apenas um pouco a lógica. A variável `role` receberá um *Array* de *string* o qual iremos percorrer e verificar ambos, caso um deles não perteçam a `roles`, o usuário será redirecionado para a página de Forbidden.
+O Primeiro passo é configurar a segurança da view, é o mesmo procedimento que fizemos no tutorial anterior. Para criar usuários a role é `AddUser`, para obter as roles usamos `AddToRole`. Então vamos modificar apenas um pouco a lógica. A variável `role` receberá um *Array* de *string* o qual iremos percorrer e verificar ambos, caso um deles não pertençam a `roles`, o usuário será redirecionado para a página de Forbidden.
 
 ```typescript
 import { Component, OnInit } from '@angular/core';
@@ -1508,7 +1508,7 @@ Crie as seguintes variáveis logo após `user`:
   usersProfilesDbFilter: UsersProfilesDbFilter = new UsersProfilesDbFilter();
 ```
 
-Vamos falar um pouco delas. Typescript como já diz o nome é *tipado*, isso significa que nossos objetos precisam ter um tipo pré-determinado.. Já `usersProfiles`será um *array* de `UserProfile`, nele vamos armazenar nossa lista de perfis. E por fim, `usersProfilesDbFilter` que é o parâmetro do método `getUsersProfiles()`, declaramos como um novo `UsersProfilesDbFilter`. Note que para as variáveis que recebem uma classe como tipo, são tipos customizados, sempre prefira essa prática ao uso do `any`, isso pode evitar erros na compiação ou em produção, visto que esse tipo genérico desativa o *typecheck* das variáveis. 
+Vamos falar um pouco delas. Typescript como já diz o nome é *tipado*, isso significa que nossos objetos precisam ter um tipo pré-determinado. Já `usersProfiles` será um *array* de `UserProfile`, nele vamos armazenar nossa lista de perfis. E por fim, `usersProfilesDbFilter` que é o parâmetro do método `getUsersProfiles()`, declaramos como um novo `UsersProfilesDbFilter`. Note que para as variáveis que recebem uma classe como tipo, são tipos customizados, sempre prefira essa prática ao uso do `any`, isso pode evitar erros na compilação ou em produção, visto que esse tipo genérico desativa o *typecheck* das variáveis. 
 
 Agora vamos trabalhar `usersProfilesDbFilter` e `usersProfiles` dentro do construtor.
 
@@ -1537,9 +1537,513 @@ Vamos usar o `*ngFor` para popular os options.
 ```
 Agora, podemos alterar tranquilamente nossa base de perfis, as alterações serão refletidas instantaneamente na criação de usuários. Agora uma boa prática para isso é criar uma base para *occupation* e popular em um select. 
 
+#### Criando uma listagem paginada
+
+Vamos trabalhar agora com uma view onde teremos que paginar os itens, geralmente esse tipo de paginação acontecerá em modelos que provém da camada `Domain` da nossa **API**.
+
+Aproveitando o que criamos no tutorial anterior, vamos criar uma lista paginada com parâmetros de perfis de usuários. Para iniciar, vamos recapitular um pouco do passo a passo anterior.
+
+Criamos as clases `UserProfile`, `UsersProfilesDbFilter`, `UsersProfilesData` e `UsersProfiles` na raiz do módulo `users`, também criamos o método `getUsersProfiles()` no `users.services.ts`.
+
+A `UserProfile` deve armazenar cada registro de perfil.
+
+```typescript
+export class UserProfile {
+    name: string;
+    description: string;
+    id: number;
+    active: boolean;
+    userId: string;
+    updatedAt: Date;
+    createdAt: Date;
+    constructor() {
+        this.name = "";
+        this.description = "";
+        this.id = 0;
+        this.active = false;
+        this.userId = "";
+        this.updatedAt = new Date();
+        this.createdAt = new Date();
+    }
+}
+```
+
+Porém nosso retorno é uma paginação da **API**, portanto não é simplesmente uma lista de `UserProfile`, ele é um dicionário de dados que precisam ser tratados. Vamos iniciar criando os parâmetros de consulta com a classe `UsersProfileDbFilter`.
+
+```typescript
+export class UsersProfilesDbFilter {
+    name: string;
+    active: boolean;
+    userId: string;
+    page: number;
+    pageSize: number;
+    orderByProperty: string;
+    constructor() {
+        this.name = "";
+        this.active = true;
+        this.userId = "";
+        this.page = 0;
+        this.pageSize = 20;
+        this.orderByProperty = "";
+    }
+}
+```
+
+Agora temos que criar os elementos que fazem a composição do nosso retorno, já temos o `UserProfile`, ele faz parte de `UsersProfilesData` e é o que vamos fazer agora.
+```typescript
+import { UserProfile } from "./userProfile";
+
+export class UsersProfilesData  {
+    totalRegisters: number;
+    data: UserProfile[];
+    constructor() {
+        this.totalRegisters = 0;
+        this.data = [];
+    }
+}
+```
+
+E por fim, vamos criar a classe do nosso esperado retorno. chamamos ela de `UsersProfiles` conforme abaixo.
+```typescript
+import { UsersProfilesData } from "./usersProfileData";
+
+export class UsersProfiles {
+    data: UsersProfilesData;
+    isSuccess: boolean;
+    message: string;
+    errors: string;
+    constructor() {
+        this.data = new UsersProfilesData();
+        this.isSuccess = false;
+        this.message = "";
+        this.errors = "";
+    }
+}
+```
+
+Note que criamos arquivos independentes para cada classe na raiz do módulo `users`. Isso ajuda a organizar melhor o código.
+
+Feito isso, vamos voltar ao `users.service.ts` e criar o método `getUsersProfiles`. Esse método terá como parâmetros `UsersProfileDbFilter` e retorno `UsersProfiles`.
+
+```typescript
+getUsersProfiles(usersProfilesDbFilter: UsersProfilesDbFilter): Observable<UsersProfiles> {
+let url: string = `${this.apiUrl}/User/UsersProfile?`;
+if (usersProfilesDbFilter.name !== "") {
+    url += `&name=${usersProfilesDbFilter.name}`;
+}
+url += `&active=${usersProfilesDbFilter.active}`;
+if (usersProfilesDbFilter.userId !== "") {
+    url += `&userId=${usersProfilesDbFilter.userId}`;
+}
+if (usersProfilesDbFilter.page > 0){
+    url += `&page=${usersProfilesDbFilter.page}`;
+}
+if (usersProfilesDbFilter.pageSize > 0){
+    url += `&pageSize=${usersProfilesDbFilter.pageSize}`;
+}
+if (usersProfilesDbFilter.orderByProperty !== "") {
+    url += `&orderByProperty=${usersProfilesDbFilter.orderByProperty}`;
+}
+
+return this.http.get<UsersProfiles>(url, 
+    {
+    headers: {
+        'Content-Type': 'application/json'
+    }
+    });
+}
+```
+
+Feito isso, vamos criar um novo componente no módulo `users` com o comando abaixo:
+
+```bash
+npx ng g c users/users-profiles-list
+```
+Nada nos impede de criar um módulo chamado `users-profiles` para separar de usuários, mas não é necessário no momento. Assim aproveitamos o que criamos para o *CRUD* de usuários.
+
+Vamos configurar a rota para visualizar a nossa view. Na constante `Routes` de `users-routing.module.ts` inclua o *children* a seguir:
+
+```typescript
+{path: 'users-profile-list', component: UsersProfilesListComponent}
+```
+
+Não esqueça de realizar o *import* do component. Agora vamos tratar de proteger nossa rota, sem detalhar muito, veja como ficou o `UsersProfilesListComponent`.
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth.service';
+
+@Component({
+  selector: 'app-users-profiles-list',
+  templateUrl: './users-profiles-list.component.html',
+  styleUrls: ['./users-profiles-list.component.scss']
+})
+export class UsersProfilesListComponent implements OnInit {
+  roles: Array<string>;
+  role: Array<string> = ['AddToRole', 'GetUsers'];
+
+  constructor(private router: Router, private authService: AuthService) {
+    this.roles = this.authService.getRoles();
+  }
+  ngOnInit(): void {
+    for (let i in this.role) {
+      if (this.roles.indexOf(this.role[i]) === -1) {
+        this.router.navigate(['manager/403'])
+      }
+    }
+  }
+
+}
+```
+Quando se trata de uma paginação, temos um mix de uma listagem controlada por um formulário, dizendo assim, parece estranho, mas lembra quando você entra numa loja virtual e ordena os produtos por menor preço para encontrar aquele SSD *barateza*? Agora faz sentido pra você? É isso que vamos fazer agora. Crie uma variável logo após `role` chamada `usersProfilesDbFilter` do tipo `UsersProfilesDbFilter` e atribua a ela o valor `new UsersProfilesDbFilter()`.
+
+```typescript
+usersProfilesDbFilter: UsersProfilesDbFilter = new UsersProfilesDbFilter();
+```
+
+Agora iremos criar nosso *html*, inicie com nosso padrão.
+
+```html
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Users Profiles</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">User</a></li>
+            <li class="breadcrumb-item active">Users Profiles</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+
+  <section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="card bg-dark">
+
+                    <div class="card-header">
+                        <h3>Users Profiles</h3>
+                    </div>
+                    <div class="card-body">
+                      <div class="col-lg-12">
+                            <!--
+                                Nosso conteúdo
+                            -->
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+```
+Para alimentar nosso select de usuários, vamos usar o `getUsers()` e retornar o valor para um *Array* de `Users`.
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth.service';
+import { UsersProfilesDbFilter } from '../usersProfilesDbFilter';
+import { User } from '../user';
+import { UsersService } from 'src/app/users.service';
+
+@Component({
+  selector: 'app-users-profiles-list',
+  templateUrl: './users-profiles-list.component.html',
+  styleUrls: ['./users-profiles-list.component.scss']
+})
+export class UsersProfilesListComponent implements OnInit {
+  roles: Array<string>;
+  role: Array<string> = ['AddToRole', 'GetUsers'];
+  usersProfilesDbFilter: UsersProfilesDbFilter = new UsersProfilesDbFilter();
+  users: User[] = [];
+
+  constructor(private router: Router, private authService: AuthService, private usersService: UsersService) {
+    this.roles = this.authService.getRoles();
+    this.usersService.getUsers()
+    .subscribe(resposta => this.users = resposta)
+  }
+  ngOnInit(): void {
+    for (let i in this.role) {
+      if (this.roles.indexOf(this.role[i]) === -1) {
+        this.router.navigate(['manager/403'])
+      }
+    }
+  }
+}
+```
+
+No component, crie um método chamado `onChange` que imprima `usersProfilesDbFilter` no console.
+
+```typescript
+onChange(){
+    console.log(this.usersProfilesDbFilter);
+}
+```
+
+No *html* crie o formulário com os parâmetros de `usersProfilesDbFilter` usando o atributo reservado  do Angular `(ngModelChange)` para invocar o método `onChange`.
+
+```html
+<div class="row">
+
+    <form class="form-horizontal">
+        <div class="row">
+
+            <div class="col-lg-6">
+                <div class="form-group row">
+                    <label for="name" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="usersProfilesDbFilter.name" (ngModelChange)="onChange();">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group row">
+                    <label for="active" class="col-sm-2 col-form-label">Active</label>
+                    <div class="col-sm-6">
+                        <select class="form-control" id="active" name="active" [(ngModel)]="usersProfilesDbFilter.active" (ngModelChange)="onChange();">
+                            <option [ngValue]="true">Ativos</option>
+                            <option [ngValue]="false">Desativados</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group row">
+                    <label for="userId" class="col-sm-2 col-form-label">User</label>
+                    <div class="col-sm-6">
+                        <select class="form-control" id="userId" name="userId" [(ngModel)]="usersProfilesDbFilter.userId" (ngModelChange)="onChange();">
+                            <option *ngFor="let user of users" [ngValue]="user.id">{{user.fullName}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group row">
+                    <label for="page" class="col-sm-2 col-form-label">Page</label>
+                    <div class="col-sm-6">
+                        <input type="number" class="form-control" id="page" name="page" [(ngModel)]="usersProfilesDbFilter.page" (ngModelChange)="onChange();">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group row">
+                    <label for="pageSize" class="col-sm-2 col-form-label">Page Size</label>
+                    <div class="col-sm-6">
+                        <select class="form-control" id="pageSize" name="pageSize" [(ngModel)]="usersProfilesDbFilter.pageSize" (ngModelChange)="onChange();">
+                            <option [ngValue]="5">5</option>
+                            <option [ngValue]="10">10</option>
+                            <option [ngValue]="20">20</option>
+                            <option [ngValue]="50">50</option>
+                            <option [ngValue]="100">100</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group row">
+                    <label for="orderByProperty" class="col-sm-2 col-form-label">Order By</label>
+                    <div class="col-sm-6">
+                        <select class="form-control" id="orderByProperty" name="orderByProperty" [(ngModel)]="usersProfilesDbFilter.orderByProperty" (ngModelChange)="onChange();">
+                            <option>Id</option>
+                            <option>Name</option>
+                            <option>Description</option>
+                            <option>Active</option>
+                            <option>UserId</option>
+                            <option>CreatedAt</option>
+                            <option>UpdatedAt</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+```
+Ótimo! Agora com esse formulário instantâneo, podemos manipular nossa view em tempo real. Vamos preparar a chamada do método que vai popular nossa tabela, sim, vamos fazer mais uma tabela. Adicione as variáveis `usersProfilesResponse` do tipo `UsersProfiles` e `usersProfiles` do tipo *Array* de `UserProfile`.
+
+```typescript
+  usersProfilesResponse: UsersProfiles = new UsersProfiles();
+  usersProfiles: UserProfile[] = [];
+```
+
+No método `ngOnInit()`, inclua a chamada para `onChange()` e modifique `onChange()` como o código abaixo.
+
+```typescript
+ngOnInit(): void {
+for (let i in this.role) {
+    if (this.roles.indexOf(this.role[i]) === -1) {
+    this.router.navigate(['manager/403'])
+    }
+}
+this.onChange()
+}
+
+onChange(){
+this.usersService.getUsersProfiles(this.usersProfilesDbFilter).subscribe(
+    (value) => {
+    this.usersProfilesResponse = value;
+    this.usersProfiles = value.data.data;
+    },
+);
+}
+```
+Nossa paginação já é funcional, mas não é interessante ao usuário digitar no formulário a página, também seria melhor ter um url que guarde o estado da consulta com os parâmetros do nosso formulário.
+
+Após a declaração de `usersProfiles`, declarea as variáveis `totalPages` do tipo `number` igual a `1` e `pagesArray` do tipo *Array* de `number` igual a `[]`.
+
+```typescript
+totalPages: number = 1;
+pagesArray: number[] = [];
+```
+No nosso construtor, crie a declaração privada de `activatedRoute` do tipo `ActivatedRoute` para usarmos no método de inicialização.
+
+```typescript
+constructor(
+private router: Router, 
+private authService: AuthService, 
+private usersService: UsersService,
+private activatedRoute: ActivatedRoute // << Nova declaração
+) {
+this.roles = this.authService.getRoles();
+this.usersService.getUsers()
+    .subscribe(resposta => this.users = resposta);
+}
+```
+Vamos criar um novo método chamado `updateTotalPages()` que deve atualizar `totalPages` de acordo com a última requisição, esse método será chamado em um novo método para recarregar a pesquisa.
+
+```typescript
+updateTotalPages(): void {
+    this.totalPages = Math.ceil(this.usersProfilesResponse.data.totalRegisters / this.usersProfilesDbFilter.pageSize);
+}
+```
+
+Agora vamos criar um método responsável por retornar um Array de páginas o qual será chamado de `getPagesArray()`. Vamos tipar o retorno como um *Array* de `number`.
+
+```typescript
+getPagesArray(): number[] {
+    return Array.from({ length: Math.max(this.totalPages, 0) }, (_, i) => i + 1);
+}
+```
+
+Crie um novo método chamado `reLoadQuery()` responsável por atualizar a consulta na **API**.
+
+```typescript
+reLoadQuery(): void {
+    this.router.navigate([], {
+        relativeTo: this.activatedRoute,
+        queryParams: { ...this.usersProfilesDbFilter },
+        queryParamsHandling: 'merge'
+    });
+    this.usersService.getUsersProfiles(this.usersProfilesDbFilter).subscribe(
+        (value) => {
+        this.usersProfilesResponse = value;
+        this.usersProfiles = this.usersProfilesResponse.data.data;
+        this.updateTotalPages();
+        this.pagesArray = this.getPagesArray();
+        },
+    );
+}
+```
+
+Modifique método `ngOnInit()` para guardar os parâmetros no url.
+
+```typescript
+ngOnInit(): void {
+    for (let i in this.role) {
+      if (this.roles.indexOf(this.role[i]) === -1) {
+        this.router.navigate(['manager/403']);
+      }
+    }
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.usersProfilesDbFilter = { ...this.usersProfilesDbFilter, ...params };
+      this.reLoadQuery();
+    });
+}
+```
+
+Agora que `reLoadQuery()` ficou responsável por realizar a atualização da requisição na **API**, não precisamos mais que `onChange()` faça isso, quer dizer, ele ainda vai fazer isso chamando `reLoadQuery()`, mas agora ele fará isso depois de mudar a página atual para `1`. Isso deve acontecer pois conforme os parâmetros de pesquisas são alterados, a quantidade de páginas pode ser alterada e usuário ficar em uma página sem dados, além de prejudicar o resultado da pesquisa.
+
+```typescript
+onChange(): void {
+    this.usersProfilesDbFilter.page = 1;
+    this.reLoadQuery();
+}
+```
+
+Crie o método `changePage()` que receberá um sinal do tipo `string` mudará a página na direção do sinal. Iremos usar nas chamadas dos botões `Anterior` e `Próxima`.
+
+```typescript
+changePage(direction: string): void {
+    if (direction === '+' && this.usersProfilesDbFilter.page < this.totalPages) {
+      this.usersProfilesDbFilter.page++;
+    } else if (direction === '-' && this.usersProfilesDbFilter.page >= 1){
+      this.usersProfilesDbFilter.page--
+    }
+
+    if (this.usersProfilesDbFilter.page >= 1 && this.usersProfilesDbFilter.page <= this.totalPages) {
+      this.reLoadQuery();
+    }
+}
+```
+
+Teremos botões para cada página, para isso crie o método `changeToPage()` que recebe um número e pula para a página solicitada independente da fila atual.
+
+```typescript
+changeToPage(page: number): void {
+    page++;
+    if (page >= 1 && page <= this.totalPages) {
+      this.usersProfilesDbFilter.page = page;
+      this.reLoadQuery();
+    }
+}
+```
+
+Ótimo, remova o campo `Page` do formulário e abaixo da tabela inclua uma nova `div`com a classe `row`. dentro dela vamos criar um `nav` com uma lógica de acordo com nossos novos métodos.
+
+```html
+<div class="row">
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <!-- Botão Anterior -->
+            <li class="page-item" *ngIf="usersProfilesDbFilter.page > 1" (click)="changePage('-')">
+            <a class="page-link" href="javascript:void(0);">Anterior</a>
+            </li>
+        
+            <!-- Números das Páginas -->
+            <li class="page-item" *ngFor="let p of pagesArray; let i = index" [class.active]="i+1 === usersProfilesDbFilter.page" (click)="changeToPage(i)">
+            <a class="page-link" href="javascript:void(0);">{{ i + 1 }}</a>
+            </li>
+        
+            <!-- Botão Próxima -->
+            <li class="page-item" *ngIf="usersProfilesDbFilter.page < totalPages" (click)="changePage('+')">
+            <a class="page-link" href="javascript:void(0);">Próxima</a>
+            </li>
+        </ul>
+    </nav>
+        
+
+</div>
+
+```
+
+Com isso nossa paginação está completa, existem alguns pontos que podem ser melhorados, por exemplo, quando a lista de itens for muito grande, a quantidade de páginas pode extrapolar o tamanho da tela do dispositivo, nesse caso o ideal é retrabalhar a lógica do `getPagesArray()` incluindo um limite de itens, além disso, inclua os botões `Primeira` e `Última` para facilitar o controle.
+
 Acreditamos que nosso tutorial ajude a contribuir com o projeto, mas lembre-se que programação não é como uma receita exata, você encontrará obstáculos no caminho, erros e bugs diversos. Não desanime, use de recursos e documentações adicionais para conseguir seus resultados. Eu mesmo consultei o [ChatGPT](https://chat.openai.com/) inúmeras vezes para criar essa documentação. 
 
-Boa sorte! "E que a força esteja com você!"
+Boa sorte! "Que a força esteja com você!" 'Obi-Wan Kenobi' - "Star Wars: Episode IV - A New Hope" (Guerra nas Estrelas: Episódio IV - Uma Nova Esperança) - 1977
 
 ```bash
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣤⠤⠐⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -1571,6 +2075,9 @@ Boa sorte! "E que a força esteja com você!"
 ⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⡄⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠛⠛⢯⡉⠉⠉⠉⠉⠛⢼⣿⠿⠿⠦⡙⣿⡆⢹⣷⣤⡀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠿⠄⠈⠻⠿⠿⠿⠿⠿⠿⠛⠛⠿⠛⠉⠁⠀⠀⠀⠀⠀⠀⠻⠿⠿⠿⠿⠟⠉⠀⠀⠤⠴⠶⠌⠿⠘⠿⠿⠿⠿⠶⠤⠀⠀⠀⠀
 ```
+
+Ou melhor, "Que com você a força esteja!" Mestre Yoda!
+
 ## Deploy
 
 #### Realizando um build com Docker
