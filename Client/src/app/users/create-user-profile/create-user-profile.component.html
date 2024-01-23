@@ -1,0 +1,77 @@
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">User Profile</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">User</a></li>
+            <li class="breadcrumb-item active">User Profile</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+
+  <section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="card bg-dark">
+
+                    <div class="card-header">
+                        <h3>User Profile</h3>
+                    </div>
+                    <div class="card-body">
+                      <div class="col-lg-12">
+                            
+                        <form #userProfileForm="ngForm" (ngSubmit)="onSubmit()">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label for="name">Name</label>
+                                        <input type="text" name="name" id="name" class="form-control" [(ngModel)]="userProfile.name" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <input type="text" name="description" id="description" class="form-control" [(ngModel)]="userProfile.description" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1 align-self-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input bg-success" type="checkbox" [(ngModel)]="userProfile.active" [ngModelOptions]="{standalone: true}">
+                                        <label for="active" class="form-check-label">Ativo</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <button type="submit" class="btn btn-success btn-block">
+                                        <i class="fa fa-save"></i> Save
+                                    </button>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="reset" class="btn btn-info btn-block">
+                                        <i class="fa-solid fa-arrow-rotate-left"></i> Limpar
+                                    </button>
+                                </div>
+                                <div class="col-sm-2">
+                                    <a class="btn btn-danger btn-block">
+                                        <i class="fa-regular fa-rectangle-xmark" routerLink="/manager/users/list"></i> Cancelar
+                                    </a>
+                                </div>
+                        
+                            </div>
+                        </form>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>

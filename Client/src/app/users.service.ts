@@ -5,6 +5,7 @@ import { User } from './users/user';
 import { Observable } from 'rxjs';
 import { UsersProfiles } from './users/usersProfiles';
 import { UsersProfilesDbFilter } from './users/usersProfilesDbFilter';
+import { UserProfile } from './users/userProfile';
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +46,15 @@ export class UsersService {
           'Content-Type': 'application/json'
         }
       });
+  }
+
+  createUserProfile(userProfile: UserProfile): Observable<UserProfile>{
+    return this.http.post<UserProfile>(`${this.apiUrl}/User/AddUserRoleProfile`, userProfile,
+    {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
   }
 
   getUsersProfiles(usersProfilesDbFilter: UsersProfilesDbFilter): Observable<UsersProfiles> {

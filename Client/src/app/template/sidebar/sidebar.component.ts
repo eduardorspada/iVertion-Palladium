@@ -141,7 +141,16 @@ export class SidebarComponent implements OnInit { //terminar
             event: "",
             type: "children",
             active: false,
-            role: "GetUsers",
+            role: "AddToRole",
+          },
+          {
+            name: "New Users Profiles",
+            iconClasses: ["nav-icon", "fa-solid", "fa-folder-plus"],
+            path: ["/manager/users/new-user-profile"],
+            event: "",
+            type: "children",
+            active: false,
+            role: "AddToRole",
           },
           {
             name: "Novo",
