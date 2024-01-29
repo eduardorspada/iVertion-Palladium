@@ -97,7 +97,7 @@ dotnet tool install --global dotnet-ef --version 6.0.13
 #### Testando o Entity Framework
 Agora vamos testar o Entity Framework.
 
-Em um terminal execute o comando abaixo:
+Em um novo terminal execute o comando abaixo:
 
 ```bash
 dotnet ef
