@@ -199,7 +199,7 @@ A arquitetura utilizada é MVC (Model, View, Controler) que é um padrão do Ang
 
 Realize o download da versão atual utilizada na aplicação no link a seguir:
 
-- [Node JS - v20.9.0](https://nodejs.org/dist/v20.9.0/node-v20.9.0-x64.msi)
+- [Node JS - v20.11.0](https://nodejs.org/dist/v20.11.0/node-v20.11.0-x64.msi)
 
 Realize a instalação seguindo os passos do *wizard*. 
 
@@ -215,7 +215,7 @@ node -v
 Esse comando deve retornar a versão instalada.
 
 ```
-v20.9.0
+v20.11.0
 ```
 
 Se o retorno for o mesmo que o valor acima, o processo de instalação foi um sucesso.
@@ -228,15 +228,15 @@ npm -v
 Se o retorno for algo parecido com o resultado abaixo, o **npm** está ativo para uso também
 
 ```
-10.1.0
+10.4.0
 ```
 
-#### Angular JS
+#### Angular
 
-Para instalar a versão atual do Angular JS, abra um terminal e execute o comando abaixo:
+Para instalar a versão atual do Angular, abra um terminal e execute o comando abaixo:
 
 ```bash
-npm install -g @angular/cli@16.2.10
+npm install -g @angular/cli@17.1.2
 ```
 
 ** *Não execute o comando acima dentro do projeto.*
@@ -251,7 +251,7 @@ npx ng version
 
 O retorno deve ser semelhante a isto:
 
-```result
+```bash
 
      _                      _                 ____ _     ___
     / \   _ __   __ _ _   _| | __ _ _ __     / ___| |   |_ _|
@@ -261,29 +261,28 @@ O retorno deve ser semelhante a isto:
                 |___/
 
 
-Angular CLI: 16.2.10
-Node: 20.9.0 (Unsupported)
-Package Manager: npm 10.1.0
+Angular CLI: 17.1.1
+Node: 20.11.0
+Package Manager: npm 10.4.0
 OS: win32 x64
 
-Angular: 16.2.12
+Angular: 17.1.2
 ... animations, common, compiler, compiler-cli, core, forms
 ... platform-browser, platform-browser-dynamic, router
 
 Package                         Version
 ---------------------------------------------------------
-@angular-devkit/architect       0.1602.10
-@angular-devkit/build-angular   16.2.10
-@angular-devkit/core            16.2.10
-@angular-devkit/schematics      16.2.10
-@angular/cli                    16.2.10
-@schematics/angular             16.2.10
+@angular-devkit/architect       0.1701.1
+@angular-devkit/build-angular   17.1.1
+@angular-devkit/core            17.1.1
+@angular-devkit/schematics      17.1.1
+@angular/cli                    17.1.1
+@schematics/angular             17.1.1
 rxjs                            7.8.1
-typescript                      5.1.6
+typescript                      5.2.2
 webpack                         5.89.0
-zone.js                         0.13.3
+zone.js                         0.14.3
 
-Warning: The current version of Node (20.9.0) is not supported by Angular.
 ```
 
 #### Instalando as dependências do projeto
