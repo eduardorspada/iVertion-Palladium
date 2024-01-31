@@ -74,8 +74,8 @@ A proposta da API é servir um ERP robusto com inúmeras opções de módulos, e
 
 Para o projeto API em ambiente de desenvolvimento, vamos instalar as dependências a seguir:
 
- - Versão Atual: 6.0.418
- - [Baixe aqui](https://dotnet.microsoft.com/pt-br/download/dotnet/thank-you/sdk-6.0.418-windows-x64-installer)
+ - Versão Atual: 8.0.101
+ - [Baixe aqui](https://download.visualstudio.microsoft.com/download/pr/cb56b18a-e2a6-4f24-be1d-fc4f023c9cc8/be3822e20b990cf180bb94ea8fbc42fe/dotnet-sdk-8.0.101-win-x64.exe)
 
 #### Testando a instalação do .NET:
 
@@ -92,7 +92,7 @@ Se a versão *6.0.418* estiver na lista, isso significa que a instalação do .N
 Após a instalação do .NET 6, precisamos instalar a ferramenta do Entity Framework para habilitar as migrações de banco de dados. Para isso execute no terminal o seguinte comando. 
 
 ```bash
-dotnet tool install --global dotnet-ef --version 6.0.13
+dotnet tool install --global dotnet-ef --version 8.0.1
 ```
 #### Testando o Entity Framework
 Agora vamos testar o Entity Framework.
@@ -106,7 +106,7 @@ dotnet ef
 A saída deve ser algo como isto:
 
 ```bash
-
+        
                      _/\__       
                ---==/    \\      
          ___  ___   |.    \|\    
@@ -114,7 +114,7 @@ A saída deve ser algo como isto:
         | _| | _|   \_/ |  //|\\ 
         |___||_|       /   \\\/\\
 
-Entity Framework Core .NET Command-line Tools 6.0.13
+Entity Framework Core .NET Command-line Tools 8.0.1
 
 Usage: dotnet ef [options] [command]
 
