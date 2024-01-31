@@ -60,7 +60,7 @@ No PhpMyAdmin crie um novo banco de dados com a nomeclatura *ivertion*, na codif
 
 
 ### iVertion WebApi
-O iVertion WebApi é o backend da aplicação, foi desenvolvido com .NET 6, MySql como banco de dados (opcional MariaDB).
+O iVertion WebApi é o backend da aplicação, foi desenvolvido com .NET 8, MySql como banco de dados (opcional MariaDB).
 
 O projeto tem toda a estrutura com *Clean Architecture*, usa os padrões do *S.O.L.I.D* como princípios de boas práticas.
 
