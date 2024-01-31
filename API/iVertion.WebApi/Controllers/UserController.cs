@@ -143,6 +143,52 @@ namespace iVertion.WebApi.Controllers
             }
             return BadRequest(result);
         }
+        /// <summary>
+        /// Returns a roles of user profile by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("RolesUsersProfile/{id}")]
+        [Authorize(Roles = "AddToRole")]
+        public async Task<List<string>> GetRolesProfileAsync(int id){
+            var roleProfileFilterdb = new RoleProfileFilterDb(){
+            UserProfileId = id,
+            PageSize = 10000, 
+            OrderByProperty = "Id", 
+            Page=1, 
+            Role= null, 
+            UserId=null
+            };
+            var rolesProfiles = await _roleProfileService.GetRoleProfilesAsync(roleProfileFilterdb);
+            
+
+            var roleModel = new List<string>();
+            foreach(var role in rolesProfiles.Data.Data){
+                roleModel.Add(role.Role);
+            }
+            return roleModel;
+            
+        }
+
+        [HttpPost("AddRoleToUserProfile")]
+        [Authorize(Roles = "AddToRole")]
+        public async Task<ActionResult> AddRoleToUserProfileAsync([FromBody] RoleProfileDTO roleProfileDto) {
+            if (roleProfileDto == null)
+                return BadRequest("The role profile dto not be null!");
+            var roleExists = await _roleService.RoleExistsAsync(roleProfileDto.Role);
+            if (roleExists){
+                var userId = User.FindFirst("UId").Value;
+                var dateNow = DateTime.UtcNow;
+                roleProfileDto.UserId = userId;
+                roleProfileDto.CreatedAt = dateNow;
+                roleProfileDto.UpdatedAt = dateNow;
+                await _roleProfileService.CreateRoleProfileAsync(roleProfileDto);
+                return Ok(roleProfileDto);
+            }
+            return NotFound($"{roleProfileDto.Role} not found!");
+            
+
+        }
 
         /// <summary>
         /// Retuns role information
@@ -188,7 +234,7 @@ namespace iVertion.WebApi.Controllers
         [Authorize(Roles = "AddToRole")]
         public async Task<ActionResult> AddUserRoleAsync([FromBody] UserProfileModel userProfileModel){
             if (userProfileModel == null)
-                return BadRequest("The role profile model not be null!");
+                return BadRequest("The user profile model not be null!");
             var userProfileDto = new UserProfileDTO();
             var userId = User.FindFirst("UId").Value;
             var dateNow = DateTime.UtcNow;

@@ -126,6 +126,13 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:iVertion.WebApi.Controllers.UserController.GetRolesProfileAsync(System.Int32)">
+            <summary>
+            Returns a roles of user profile by id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:iVertion.WebApi.Controllers.UserController.GetRoleProfileAsync(iVertion.Domain.FiltersDb.RoleProfileFilterDb)">
             <summary>
             Retuns role information

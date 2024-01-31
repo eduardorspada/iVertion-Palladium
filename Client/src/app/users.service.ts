@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { UsersProfiles } from './users/usersProfiles';
 import { UsersProfilesDbFilter } from './users/usersProfilesDbFilter';
 import { UserProfile } from './users/userProfile';
+import { UserProfileResponse } from './users/userProfileResponse';
+import { Role } from './users/role';
 
 @Injectable({
   providedIn: 'root'
@@ -82,5 +84,35 @@ export class UsersService {
           'Content-Type': 'application/json'
         }
       });
+  }
+  getUserProfileByIdAsync(id: string): Observable<UserProfileResponse> {
+    let url: string = `${this.apiUrl}/User/UsersProfile/${id}`;
+    return this.http.get<UserProfileResponse>(url, 
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+  }
+  getRolesUserProfileById(id: string): Observable<Array<string>> {
+    let url: string = `${this.apiUrl}/User/RolesUsersProfile/${id}`;
+
+    return this.http.get<Array<string>>(url,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+  }
+  getAllUsersRoles(): Observable<Array<Role>> {
+    let url: string = `${this.apiUrl}/User/GetRoles`;
+
+    return this.http.get<Array<Role>>(url,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
   }
 }
