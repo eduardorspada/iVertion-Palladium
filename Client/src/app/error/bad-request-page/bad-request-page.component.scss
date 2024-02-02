@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+$animationTime: 2s;
+
+h1 {
+  margin: 40px 0 20px;
+}
+
+.box {
+  margin-left: 46.1%;
+  border-radius: 5px;
+  width: 55px;
+  height: 55px;
+  background-color: #333;
+  animation: shake 1s;
+  animation-delay: ($animationTime - .5);
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-left: 5px solid #f00;
+    height: 30px;
+    width: 5px;
+    left: calc(50% - 2.5px);
+    top: calc(25px - 15px);
+    transform: rotate(45deg);
+  }
+
+  &::after {
+    transform: rotate(-45deg);
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0px);
+  }
+
+  25% {
+    transform: translateX(5px);
+  }
+
+  50% {
+    transform: translateX(-5px);
+  }
+
+  75% {
+    transform: translateX(5px);
+  }
+
+  100% {
+    transform: translateX(0px);
+  }
+}
