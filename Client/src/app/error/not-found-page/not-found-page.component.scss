@@ -1,0 +1,52 @@
+@import url("https://fonts.googleapis.com/css?family=Lato");
+
+$animationTime: 2s;
+
+h1 {
+  margin: 40px 0 20px;
+}
+
+.magnifier {
+  color: #fff;
+  margin-left: 46.1%;
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  background-color: #333;
+  animation: zoom 1s;
+  animation-delay: ($animationTime - .5);
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    border-left: 5px solid #fff;
+    height: 20px;
+    width: 5px;
+    left: calc(50% - 5px);
+    top: calc(30px - 10px);
+  }
+
+  &::before {
+    transform: rotate(45deg);
+  }
+
+  &::after {
+    transform: rotate(-45deg);
+    border-left: 5px solid #f00;
+  }
+}
+
+@keyframes zoom {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
