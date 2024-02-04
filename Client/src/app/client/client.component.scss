@@ -1,0 +1,27 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  flex: 1;
+}
+
+.footer {
+  text-align: center;
+}
+
+.navbar {
+  background-color: #f8f9fa;
+}
+
+.jumbotron {
+  background-color: #e9ecef;
+  color: #212529;
+}
+
+.footer {
+  background-color: #f8f9fa;
+  color: #212529;
+}
