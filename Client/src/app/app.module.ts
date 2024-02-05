@@ -19,6 +19,7 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { AuthService } from './auth.service';
 import { TokenInterceptor } from './token.interceptor';
 import { UsersModule } from './users/users.module';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { UsersModule } from './users/users.module';
       useClass: TokenInterceptor,
       multi: true
     },
+    provideAnimationsAsync(),
   ],
   bootstrap: [AppComponent]
 })
