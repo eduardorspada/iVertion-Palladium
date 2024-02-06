@@ -5,6 +5,7 @@ export class UsersProfilesDbFilter {
     page: number;
     pageSize: number;
     orderByProperty: string;
+    sort: string;
     constructor() {
         this.name = "";
         this.active = true;
@@ -12,5 +13,6 @@ export class UsersProfilesDbFilter {
         this.page = 1;
         this.pageSize = 20;
         this.orderByProperty = "";
+        this.sort = "";
     }
 }
