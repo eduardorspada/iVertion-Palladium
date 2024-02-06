@@ -16,7 +16,7 @@ export class UsersService {
   apiUrl: string = environment.apiUrl;
   constructor(private http: HttpClient) { }
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/User`, 
+    return this.http.get<User[]>(`${this.apiUrl}/User`,
       {
         headers: {
         'Content-Type': 'application/json'
@@ -24,7 +24,7 @@ export class UsersService {
     })
   }
   async getUsersById(id: string): Promise<Observable<User>>{
-    return this.http.get<User>(`${this.apiUrl}/User/${id}`, 
+    return this.http.get<User>(`${this.apiUrl}/User/${id}`,
       {
         headers: {
         'Content-Type': 'application/json'
@@ -77,8 +77,11 @@ export class UsersService {
     if (usersProfilesDbFilter.orderByProperty !== "") {
       url += `&orderByProperty=${usersProfilesDbFilter.orderByProperty}`;
     }
+    if (usersProfilesDbFilter.sort!== "") {
+      url += `&sort=${usersProfilesDbFilter.sort}`;
+    }
 
-    return this.http.get<UsersProfiles>(url, 
+    return this.http.get<UsersProfiles>(url,
       {
         headers: {
           'Content-Type': 'application/json'
@@ -87,7 +90,7 @@ export class UsersService {
   }
   getUserProfileByIdAsync(id: string): Observable<UserProfileResponse> {
     let url: string = `${this.apiUrl}/User/UsersProfile/${id}`;
-    return this.http.get<UserProfileResponse>(url, 
+    return this.http.get<UserProfileResponse>(url,
       {
         headers: {
           'Content-Type': 'application/json'
