@@ -19,17 +19,29 @@ namespace iVertion.Infra.Data.Repositories
             if (string.IsNullOrEmpty(request.OrderByProperty))
                 response.Data = await query.ToListAsync();
             else
-                response.Data = query.OrderByDynamic(request.OrderByProperty)
-                                     .Skip((request.Page - 1) * request.PageSize)
-                                     .Take(request.PageSize)
-                                     .ToList();
+#pragma warning disable CS8604 // Possible null reference argument.
+                response.Data = query.OrderByDynamic(request.OrderByProperty, request.Sort)
+                                    .Skip((request.Page - 1) * request.PageSize)
+                                    .Take(request.PageSize)
+                                    .ToList();
+#pragma warning restore CS8604 // Possible null reference argument.
             return response;
         }
-        private static IEnumerable<T> OrderByDynamic<T>(this IEnumerable<T> query, string propertyName)
+        private static IEnumerable<T> OrderByDynamic<T>(this IEnumerable<T> query, string propertyName, string sortDirection)
         {
-            return query.OrderBy(t => t.GetType()
-                                       .GetProperty(propertyName)
-                                       .GetValue(t, null));
+            if (sortDirection == "Desc")
+            {
+                return query.OrderByDescending(t => t.GetType()
+                                                    .GetProperty(propertyName)
+                                                    .GetValue(t, null));
+            }
+            else
+            {
+                return query.OrderBy(t => t.GetType()
+                                        .GetProperty(propertyName)
+                                        .GetValue(t, null));
+            }
         }
+
     }
 }
