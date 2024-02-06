@@ -32,7 +32,7 @@
 
                             <form class="form-horizontal">
                                 <div class="row">
-    
+
                                     <div class="col-lg-6">
                                         <div class="form-group row">
                                             <label for="name" class="col-sm-2 col-form-label">Name</label>
@@ -82,21 +82,28 @@
                                         <div class="form-group row">
                                             <label for="orderByProperty" class="col-sm-2 col-form-label">Order By</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control" id="orderByProperty" name="orderByProperty" [(ngModel)]="usersProfilesDbFilter.orderByProperty" (ngModelChange)="onChange();">
+                                                <select class="form-control" id="orderByProperty" name="orderByProperty" [(ngModel)]="orderByPropertySort" (ngModelChange)="onChange();">
                                                     <option value="">All</option>
-                                                    <option>Id</option>
-                                                    <option>Name</option>
-                                                    <option>Description</option>
-                                                    <option>Active</option>
-                                                    <option>UserId</option>
-                                                    <option>CreatedAt</option>
-                                                    <option>UpdatedAt</option>
+                                                    <option>Id Asc</option>
+                                                    <option>Id Desc</option>
+                                                    <option>Name Asc</option>
+                                                    <option>Name Desc</option>
+                                                    <option>Description Asc</option>
+                                                    <option>Description Desc</option>
+                                                    <option>Active Asc</option>
+                                                    <option>Active Desc</option>
+                                                    <option>UserId Asc</option>
+                                                    <option>UserId Desc</option>
+                                                    <option>CreatedAt Asc</option>
+                                                    <option>CreatedAt Desc</option>
+                                                    <option>UpdatedAt Asc</option>
+                                                    <option>UpdatedAt Desc</option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-    
+
                             </form>
 
                         </div>
@@ -140,19 +147,19 @@
                                   <li class="page-item" *ngIf="usersProfilesDbFilter.page > 1" (click)="changePage('-')">
                                     <a class="page-link" href="javascript:void(0);">Anterior</a>
                                   </li>
-                              
+
                                   <!-- Números das Páginas -->
                                   <li class="page-item" *ngFor="let p of pagesArray; let i = index" [class.active]="i+1 === usersProfilesDbFilter.page" (click)="changeToPage(i)">
                                     <a class="page-link" href="javascript:void(0);">{{ i + 1 }}</a>
                                   </li>
-                              
+
                                   <!-- Botão Próxima -->
                                   <li class="page-item" *ngIf="usersProfilesDbFilter.page < totalPages" (click)="changePage('+')">
                                     <a class="page-link" href="javascript:void(0);">Próxima</a>
                                   </li>
                                 </ul>
                               </nav>
-                              
+
 
                         </div>
 
