@@ -69,7 +69,6 @@ export class UsersProfilesListComponent implements OnInit {
       queryParams: { ...this.usersProfilesDbFilter },
       queryParamsHandling: 'merge'
     });
-    console.log(this.usersProfilesDbFilter)
     this.usersService.getUsersProfiles(this.usersProfilesDbFilter).subscribe(
       (value) => {
         this.usersProfilesResponse = value;
