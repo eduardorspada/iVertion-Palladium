@@ -3,8 +3,6 @@ import { User } from '../user';
 import { UsersService } from 'src/app/users.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { __values } from 'tslib';
-import { param } from 'jquery';
-import { Observable, map } from 'rxjs';
 import { AuthService } from 'src/app/auth.service';
 
 @Component({
@@ -18,10 +16,10 @@ export class UserComponent implements OnInit {
   userRoles: Array<string> | undefined;
   role: string = 'GetUsers';
   id: string = "";
-  
-  constructor(private service: UsersService, 
-              private route: ActivatedRoute, 
-              private router: Router, 
+
+  constructor(private service: UsersService,
+              private route: ActivatedRoute,
+              private router: Router,
               private authService: AuthService){
     this.route.params.subscribe(params => {
       this.id = params['id'];
