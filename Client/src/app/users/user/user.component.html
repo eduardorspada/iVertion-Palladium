@@ -38,58 +38,58 @@
                           <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                             <dl class="row">
                               <dt class="col-sm-1">ID:</dt>
-                              <dl class="col-sm-5"># {{user.id}}</dl>
+                              <dl class="col-sm-5"># {{user?.id}}</dl>
                             </dl>
                             <dl class="row">
                               <dt class="col-sm-1">Full Name:</dt>
-                              <dl class="col-sm-5">{{user.fullName}}</dl>
+                              <dl class="col-sm-5">{{user?.fullName}}</dl>
                               <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-full-name/:id">Update</button></dl>
                             </dl>
                             <dl class="row">
                               <dt class="col-sm-1">Phone Number:</dt>
-                              <dl class="col-sm-5">{{user.phoneNumber}}</dl>
+                              <dl class="col-sm-5">{{user?.phoneNumber}}</dl>
                               <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-phone-number/:id">Update</button></dl>
                             </dl>
                             <dl class="row">
                               <dt class="col-sm-1">Profile Picture:</dt>
-                              <dl class="col-sm-5">{{user.profilePicture}}</dl>
+                              <dl class="col-sm-5">{{user?.profilePicture}}</dl>
                               <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-profile-picture/:id">Update</button></dl>
                             </dl>
                             <dl class="row">
                               <dt class="col-sm-1">Profile Cover:</dt>
-                              <dl class="col-sm-5">{{user.profileCover}}</dl>
+                              <dl class="col-sm-5">{{user?.profileCover}}</dl>
                               <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-profile-cover/:id">Update</button></dl>
                             </dl>
                             <dl class="row">
                               <dt class="col-sm-1">Profile Description:</dt>
-                              <dl class="col-sm-5">{{user.profileDescription}}</dl>
+                              <dl class="col-sm-5">{{user?.profileDescription}}</dl>
                               <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-profile-description/:id">Update</button></dl>
                             </dl>
                             <dl class="row">
                               <dt class="col-sm-1">Occupation:</dt>
-                              <dl class="col-sm-5">{{user.occupation}}</dl>
+                              <dl class="col-sm-5">{{user?.occupation}}</dl>
                               <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-occupation/:id">Update</button></dl>
                             </dl>
                             <dl class="row">
                               <dt class="col-sm-1">Birthday:</dt>
-                              <dl class="col-sm-5">{{user.birthday}}</dl>
+                              <dl class="col-sm-5">{{user?.birthday}}</dl>
                               <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-birthday/:id">Update</button></dl>
                             </dl>
-                            
+
                           </div>
                           <div class="tab-pane fade" id="nav-security" role="tabpanel" aria-labelledby="nav-security-tab">
                             <dl class="row">
                                 <dt class="col-sm-1">ID:</dt>
-                                <dl class="col-sm-5"># {{user.id}}</dl>
+                                <dl class="col-sm-5"># {{user?.id}}</dl>
                             </dl>
                             <dl class="row">
                               <dt class="col-sm-1">User Name:</dt>
-                              <dl class="col-sm-5">{{user.userName}}</dl>
+                              <dl class="col-sm-5">{{user?.userName}}</dl>
                               <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-user-name/:id">Update</button></dl>
                             </dl>
                             <dl class="row">
                                 <dt class="col-sm-1">E-Mail:</dt>
-                                <dl class="col-sm-5">{{user.email}}</dl>
+                                <dl class="col-sm-5">{{user?.email}}</dl>
                                 <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/update-email/:id">Update</button></dl>
                               </dl>
                               <dl class="row">
@@ -99,15 +99,15 @@
                               </dl>
                               <dl class="row">
                                 <dt class="col-sm-1">Active:</dt>
-                                <dl class="col-sm-5" *ngIf="user.isEnabled"><i class="fa-solid fa-square-check text-success"></i></dl>
-                                <dl class="col-sm-5" *ngIf="user.isEnabled === false"><i class="fa-solid fa-square-xmark text-danger"></i></dl>
+                                <dl class="col-sm-5" *ngIf="user?.isEnabled"><i class="fa-solid fa-square-check text-success"></i></dl>
+                                <dl class="col-sm-5" *ngIf="user?.isEnabled === false"><i class="fa-solid fa-square-xmark text-danger"></i></dl>
                                 <dl class="col-sm-5"><button class="btn btn-dark" routerLink="/manager/users/user/change-status/:id">Update</button></dl>
                               </dl>
                             </div>
                             <div class="tab-pane fade" id="nav-roles" role="tabpanel" aria-labelledby="nav-roles-tab">
                               <dl class="row">
                                 <dt class="col-sm-1">ID:</dt>
-                                <dl class="col-sm-5"># {{user.id}}</dl>
+                                <dl class="col-sm-5"># {{user?.id}}</dl>
                               </dl>
                               <div class="row">
                                 <div class="col-lg-12">
