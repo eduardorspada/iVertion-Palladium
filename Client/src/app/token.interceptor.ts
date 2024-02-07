@@ -13,12 +13,11 @@ export class TokenInterceptor implements HttpInterceptor {
   constructor() {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const tokenString = localStorage.getItem('access_token'); 
+    const tokenString = localStorage.getItem('access_token');
 
     if (tokenString) {
       const token = JSON.parse(tokenString);
       const jwt = token.token;
-      console.log(jwt);
       request = request.clone(
         {
           setHeaders: {
