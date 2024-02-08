@@ -19,11 +19,11 @@ export class UserProfileComponent implements OnInit {
   allUserProfileRoles: Array<Role> = [];
   id: string = "";
   constructor(
-    private router: Router, 
+    private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService,
     private usersService: UsersService
-    ) 
+    )
   {
     this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -48,6 +48,11 @@ export class UserProfileComponent implements OnInit {
         this.usersService.getRolesUserProfileById(this.id).subscribe(
           (value) => {
             this.userProfileRoles = value;
+            for (let i in this.allUserProfileRoles) {
+              if (this.userProfileRoles.indexOf(this.allUserProfileRoles[i].name) === -1){
+                this.otherUserProfileRoles.push(this.allUserProfileRoles[i].name)
+              }
+            }
           },
           (err) => {
             console.log(err)
@@ -62,11 +67,6 @@ export class UserProfileComponent implements OnInit {
         },
         () => {
           // action
-          for (let i in this.allUserProfileRoles) {
-            if (this.userProfileRoles.indexOf(this.allUserProfileRoles[i].name) === -1){
-              this.otherUserProfileRoles.push(this.allUserProfileRoles[i].name)
-            }
-          }
         }
       )
     }
