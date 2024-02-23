@@ -23,9 +23,10 @@ namespace iVertion.Infra.IoC
                     var host = configuration["DBHOST"] ?? "localhost";
                     var port = configuration["DBPORT"] ?? "3306";
                     var user = configuration["DBUSER"] ?? "root";
+                    var database = configuration["DBNAME"] ?? "ivertion";
                     var password = configuration["DBPASSWORD"] ?? "";
  
-                    string connectionString = $"Server={host};Port={port};Database=ivertion;User ID={user}; Password={password};";
+                    string connectionString = $"Server={host};Port={port};Database={database};User ID={user}; Password={password};";
                     options.UseMySql(connectionString,
                                     ServerVersion.AutoDetect(connectionString));
                 }
