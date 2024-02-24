@@ -2091,3 +2091,8 @@ Para subir os contêiners rode o comando
 docker-compose up
 ```
 
+#### Executando o container no linux
+Para executar o container no linux use o seguinte comando
+```bash
+sudo docker run --name ivertion-api -e DBHOST=DataBaseHostIp -e DBUSER=DatabaseUser -e DBPASSWORD=DaabaseUserPassword -e DBNAME=DatabaseName -e DBPORT=3306 -p 8000:80 -d eduardospada/ivertion-api:latest
+```
