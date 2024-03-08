@@ -1,8 +1,8 @@
 version: "3.8"
 services:
-    proxy:
+    server:
         build: 
-            context: ./Proxy
+            context: ./Server
             dockerfile: Dockerfile
         ports: 
             - "80:80"
@@ -25,6 +25,7 @@ services:
         environment:
             - DBHOST=db
             - DBPORT=3306
+            - DBNAME=ivertion
             - DBUSER=ivertion
             - DBPASSWORD=1V3rT10n
 
