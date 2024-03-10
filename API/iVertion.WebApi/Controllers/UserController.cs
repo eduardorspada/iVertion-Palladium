@@ -169,23 +169,61 @@ namespace iVertion.WebApi.Controllers
             return roleModel;
             
         }
-
+        /// <summary>
+        /// Adds a Role to a User Profile by User Profile Id.
+        /// </summary>
+        /// <param name="roleFromUserProfileIdModel"></param>
+        /// <returns></returns>
         [HttpPost("AddRoleToUserProfile")]
         [Authorize(Roles = "AddToRole")]
-        public async Task<ActionResult> AddRoleToUserProfileAsync([FromBody] RoleProfileDTO roleProfileDto) {
-            if (roleProfileDto == null)
-                return BadRequest("The role profile dto not be null!");
-            var roleExists = await _roleService.RoleExistsAsync(roleProfileDto.Role);
-            if (roleExists){
-                var userId = User.FindFirst("UId").Value;
-                var dateNow = DateTime.UtcNow;
-                roleProfileDto.UserId = userId;
-                roleProfileDto.CreatedAt = dateNow;
-                roleProfileDto.UpdatedAt = dateNow;
-                await _roleProfileService.CreateRoleProfileAsync(roleProfileDto);
-                return Ok(roleProfileDto);
+        public async Task<ActionResult> AddRoleToUserProfileAsync([FromBody] RoleFromUserProfileIdModel roleFromUserProfileIdModel) {
+            if (!String.IsNullOrEmpty(roleFromUserProfileIdModel.Role) && roleFromUserProfileIdModel.UserProfileId > 0){
+                var roleExists = await _roleService.RoleExistsAsync(roleFromUserProfileIdModel.Role);
+                if (roleExists){
+                    var userProfile = await _userProfileService.GetUserProfileByIdAsync(roleFromUserProfileIdModel.UserProfileId);
+                    if (userProfile.Data == null)
+                        return NotFound("This Id does not correspond to an existing User Profile.");
+                    if (userProfile.IsSuccess){
+                        var roleProfileFilterdb = new RoleProfileFilterDb(){
+                        UserProfileId = roleFromUserProfileIdModel.UserProfileId,
+                        PageSize = 10000, 
+                        OrderByProperty = "Id", 
+                        Page=1, 
+                        Role= roleFromUserProfileIdModel.Role, 
+                        UserId=null
+                        };
+                        var rolesProfiles = await _roleProfileService.GetRoleProfilesAsync(roleProfileFilterdb);
+                        
+
+                        var roleModel = new List<string>();
+                        var roleProfileId = 0;
+                        foreach(var role in rolesProfiles.Data.Data){
+                            roleModel.Add(role.Role);
+                            roleProfileId = role.Id;
+                        }
+                        if (!roleModel.Contains(roleFromUserProfileIdModel.Role)){
+                            var roleProfileDto = new RoleProfileDTO();
+                            var userId = User.FindFirst("UId").Value;
+                            var dateNow = DateTime.UtcNow;
+                            roleProfileDto.Role = roleFromUserProfileIdModel.Role;
+                            roleProfileDto.UserProfileId = roleFromUserProfileIdModel.UserProfileId;
+                            roleProfileDto.Active = true;
+                            roleProfileDto.UserId = userId;
+                            roleProfileDto.CreatedAt = dateNow;
+                            roleProfileDto.UpdatedAt = dateNow;
+                            await _roleProfileService.CreateRoleProfileAsync(roleProfileDto);
+                            return Ok($@"{roleFromUserProfileIdModel.Role} has been successfully added.");
+                        }
+                        return Conflict($@"{roleFromUserProfileIdModel.Role} already exists in Role Profile");
+                    }
+                    return BadRequest(userProfile);
+
+                }
+                return NotFound(@"The specified role does not exist in the system!");
             }
-            return NotFound($"{roleProfileDto.Role} not found!");
+
+            
+            return BadRequest("Role is not be null or empty and UserProfileId must be greater than zero");
             
 
         }

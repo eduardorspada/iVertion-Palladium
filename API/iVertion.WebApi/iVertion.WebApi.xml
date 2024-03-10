@@ -133,6 +133,13 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:iVertion.WebApi.Controllers.UserController.AddRoleToUserProfileAsync(iVertion.WebApi.Models.RoleFromUserProfileIdModel)">
+            <summary>
+            Add a Role to a User Profile by User Profile Id.
+            </summary>
+            <param name="roleFromUserProfileIdModel"></param>
+            <returns></returns>
+        </member>
         <member name="M:iVertion.WebApi.Controllers.UserController.RemoveRoleFromUserProfileId(iVertion.WebApi.Models.RoleFromUserProfileIdModel)">
             <summary>
             Removes a Role from a User Profile by the Role name and the User Profile Id.
