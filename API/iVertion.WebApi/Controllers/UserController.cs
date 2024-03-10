@@ -189,6 +189,53 @@ namespace iVertion.WebApi.Controllers
             
 
         }
+        /// <summary>
+        /// Removes a Role from a User Profile by the Role name and the User Profile Id.
+        /// </summary>
+        /// <param name="roleFromUserProfileIdModel"></param>
+        /// <returns></returns>
+        [HttpDelete("RemoveRoleFromUserProfileId")]
+        [Authorize(Roles = "RemoveFromRole")]
+        public async Task<ActionResult> RemoveRoleFromUserProfileId([FromBody] RoleFromUserProfileIdModel roleFromUserProfileIdModel){
+            if (!String.IsNullOrEmpty(roleFromUserProfileIdModel.Role) && roleFromUserProfileIdModel.UserProfileId > 0){
+                var roleExists = await _roleService.RoleExistsAsync(roleFromUserProfileIdModel.Role);
+                if (roleExists){
+                    var userProfile = await _userProfileService.GetUserProfileByIdAsync(roleFromUserProfileIdModel.UserProfileId);
+                    if (userProfile.Data == null)
+                        return NotFound("This Id does not correspond to an existing User Profile.");
+                    if (userProfile.IsSuccess){
+                        var roleProfileFilterdb = new RoleProfileFilterDb(){
+                        UserProfileId = roleFromUserProfileIdModel.UserProfileId,
+                        PageSize = 10000, 
+                        OrderByProperty = "Id", 
+                        Page=1, 
+                        Role= roleFromUserProfileIdModel.Role, 
+                        UserId=null
+                        };
+                        var rolesProfiles = await _roleProfileService.GetRoleProfilesAsync(roleProfileFilterdb);
+                        
+
+                        var roleModel = new List<string>();
+                        var roleProfileId = 0;
+                        foreach(var role in rolesProfiles.Data.Data){
+                            roleModel.Add(role.Role);
+                            roleProfileId = role.Id;
+                        }
+                        if (!roleModel.Contains(roleFromUserProfileIdModel.Role)){
+                            return Conflict($@"{roleFromUserProfileIdModel.Role} does not exist in Role Profile");
+                        }
+                        await _roleProfileService.RemoveRoleProfileAsync(roleProfileId);
+                        return Ok($@"{roleFromUserProfileIdModel.Role} has been successfully removed.");
+                    }
+                    return BadRequest(userProfile);
+
+                }
+                return NotFound(@"The specified role does not exist in the system!");
+            }
+
+            
+            return BadRequest("Role is not be null or empty and UserProfileId must be greater than zero");
+        }
 
         /// <summary>
         /// Retuns role information
