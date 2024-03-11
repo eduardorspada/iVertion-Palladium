@@ -1,6 +1,9 @@
 
 namespace iVertion.WebApi.Models
 {
+    /// <summary>
+    /// This model is the body of users' requests for additional roles.
+    /// </summary>
     public class AddtionalUserRoleModel
     {
         /// <summary>
