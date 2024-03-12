@@ -36,6 +36,8 @@ namespace iVertion.WebApi.Controllers
         /// <param name="authentication"></param>
         /// <param name="userService"></param>
         /// <param name="roleService"></param>
+        /// <param name="userProfileService"></param>
+        /// <param name="roleProfileService"></param>
         public UserController(IAuthenticate authentication,
                               IUserInterface<ApplicationUser> userService,
                               IRoleInterface<IdentityRole> roleService,
