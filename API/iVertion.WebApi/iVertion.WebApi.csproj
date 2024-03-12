@@ -23,5 +23,7 @@
   <ItemGroup>
     <Folder Include="Models\" />
   </ItemGroup>
-
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <NoWarn>8602</NoWarn>
+  </PropertyGroup>
 </Project>
