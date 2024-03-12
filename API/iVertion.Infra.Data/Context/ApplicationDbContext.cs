@@ -11,7 +11,7 @@ namespace iVertion.Infra.Data.Context
         // Users Profiles
         public DbSet<UserProfile>? UserProfiles { get; set; }
         public DbSet<RoleProfile>? RoleProfiles { get; set; }
-        public DbSet<AddtionalUserRole>? AddtionalUserRoles { get; set; }
+        public DbSet<AdditionalUserRole>? AdditionalUserRoles { get; set; }
         // Blogs
         public DbSet<Category>? Categories { get; set; }
         public DbSet<Article>? Articles { get; set; }

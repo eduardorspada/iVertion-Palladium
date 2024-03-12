@@ -30,7 +30,7 @@ namespace iVertion.WebApi.Controllers
         private readonly IUserInterface<ApplicationUser> _userService;
         private readonly IUserProfileService _userProfileService;
         private readonly IRoleProfileService _roleProfileService;
-        private readonly IAddtionalUserRoleService _addtionalUserRoleService;
+        private readonly IAdditionalUserRoleService _additionalUserRoleService;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -39,13 +39,13 @@ namespace iVertion.WebApi.Controllers
         /// <param name="roleService"></param>
         /// <param name="userProfileService"></param>
         /// <param name="roleProfileService"></param>
-        /// <param name="addtionalUserRoleService"></param>
+        /// <param name="additionalUserRoleService"></param>
         public UserController(IAuthenticate authentication,
                               IUserInterface<ApplicationUser> userService,
                               IRoleInterface<IdentityRole> roleService,
                                IUserProfileService userProfileService,
                                IRoleProfileService roleProfileService,
-                               IAddtionalUserRoleService addtionalUserRoleService)
+                               IAdditionalUserRoleService additionalUserRoleService)
         {
             _authentication = authentication ??
                 throw new ArgumentNullException(nameof(authentication));
@@ -57,8 +57,8 @@ namespace iVertion.WebApi.Controllers
                 throw new ArgumentNullException(nameof(userProfileService));
             _roleProfileService = roleProfileService ??
                 throw new ArgumentNullException(nameof(roleProfileService));
-            _addtionalUserRoleService = addtionalUserRoleService ??
-                throw new ArgumentNullException(nameof(addtionalUserRoleService));
+            _additionalUserRoleService = additionalUserRoleService ??
+                throw new ArgumentNullException(nameof(additionalUserRoleService));
         }
         /// <summary>
         /// Returns a list of users.
@@ -335,7 +335,7 @@ namespace iVertion.WebApi.Controllers
                                     roleProfileId = role.Id;
                                 }
                                 if (!roleModel.Contains(additionalUserRoleModel.Role)){
-                                    var additionalUserRolesFilterDb = new AddtionalUserRoleFilterDb(){
+                                    var additionalUserRolesFilterDb = new AdditionalUserRoleFilterDb(){
                                         TargetUserId = targetUserId,
                                         PageSize = 10000, 
                                         OrderByProperty = "Id", 
@@ -343,7 +343,7 @@ namespace iVertion.WebApi.Controllers
                                         Role=additionalUserRoleModel.Role, 
                                         UserId=null
                                         };
-                                    var additionalUserRoles = await _addtionalUserRoleService.GetAddtionalUserRolesAsync(additionalUserRolesFilterDb);
+                                    var additionalUserRoles = await _additionalUserRoleService.GetAdditionalUserRolesAsync(additionalUserRolesFilterDb);
                                     var additionalRoles = new List<string>();
                                     var additionalUserRoleId = 0;
                                     foreach(var role in additionalUserRoles.Data.Data){
@@ -351,7 +351,7 @@ namespace iVertion.WebApi.Controllers
                                         additionalUserRoleId = role.Id;
                                     }
                                     if (!additionalRoles.Contains(additionalUserRoleModel.Role)){
-                                        var addtionalUserRoleDto = new AddtionalUserRoleDTO();
+                                        var addtionalUserRoleDto = new AdditionalUserRoleDTO();
                                         var userId = User.FindFirst("UId").Value;
                                         var dateNow = DateTime.UtcNow;
                                         addtionalUserRoleDto.Role = additionalUserRoleModel.Role;
@@ -361,7 +361,7 @@ namespace iVertion.WebApi.Controllers
                                         addtionalUserRoleDto.CreatedAt = dateNow;
                                         addtionalUserRoleDto.UpdatedAt = dateNow;
                                         
-                                        await _addtionalUserRoleService.CreateAddtionalUserRoleAsync(addtionalUserRoleDto);
+                                        await _additionalUserRoleService.CreateAdditionalUserRoleAsync(addtionalUserRoleDto);
                                         return Ok($@"The {additionalUserRoleModel.Role} has been successfully assigned to the {targetUser.FullName}.");
                                     }
                                     return Conflict($@"The {additionalUserRoleModel.Role} already exists in this {targetUser.FullName}'s additional roles.");
@@ -396,7 +396,7 @@ namespace iVertion.WebApi.Controllers
                         try {
                             var targetUserId = targetUser.Id;
 
-                            var additionalUserRolesFilterDb = new AddtionalUserRoleFilterDb(){
+                            var additionalUserRolesFilterDb = new AdditionalUserRoleFilterDb(){
                                 TargetUserId = targetUserId,
                                 PageSize = 10000, 
                                 OrderByProperty = "Id", 
@@ -404,7 +404,7 @@ namespace iVertion.WebApi.Controllers
                                 Role=additionalUserRoleModel.Role, 
                                 UserId=null
                                 };
-                            var additionalUserRoles = await _addtionalUserRoleService.GetAddtionalUserRolesAsync(additionalUserRolesFilterDb);
+                            var additionalUserRoles = await _additionalUserRoleService.GetAdditionalUserRolesAsync(additionalUserRolesFilterDb);
 
                                 var roleModel = new List<string>();
                                 var additionalUserRoleId = 0;
@@ -413,7 +413,7 @@ namespace iVertion.WebApi.Controllers
                                     additionalUserRoleId = role.Id;
                                 }
                                 if (roleModel.Contains(additionalUserRoleModel.Role)){
-                                    await _addtionalUserRoleService.RemoveAddtionalUserRoleAsync(additionalUserRoleId);
+                                    await _additionalUserRoleService.RemoveAdditionalUserRoleAsync(additionalUserRoleId);
                                     return Ok($@"The {additionalUserRoleModel.Role} has been successfully removed from the {targetUser.FullName}.");
                                 }
                                 return Conflict($@"The {additionalUserRoleModel.Role} not exists in this {targetUser.FullName}'s additional roles.");

@@ -2,7 +2,7 @@ using iVertion.Domain.Interfaces;
 
 namespace iVertion.Domain.FiltersDb
 {
-    public class AddtionalUserRoleFilterDb : PagedBaseRequest
+    public class AdditionalUserRoleFilterDb : PagedBaseRequest
     {
         public string? Role { get; set; }
         public string? TargetUserId { get; set; }

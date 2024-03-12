@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace iVertion.Infra.Data.EntitiesConfiguration
 {
-    public class AddtionalUserRoleConfiguration : IEntityTypeConfiguration<AddtionalUserRole>
+    public class AdditionalUserRoleConfiguration : IEntityTypeConfiguration<AdditionalUserRole>
     {
-        public void Configure(EntityTypeBuilder<AddtionalUserRole> builder)
+        public void Configure(EntityTypeBuilder<AdditionalUserRole> builder)
         {
             builder.HasKey(t => t.Id);
             builder.Property(p => p.Role).HasMaxLength(25).IsRequired();

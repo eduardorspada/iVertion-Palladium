@@ -2,12 +2,12 @@ using iVertion.Domain.Validation;
 
 namespace iVertion.Domain.Entities
 {
-    public sealed class AddtionalUserRole : Entity
+    public sealed class AdditionalUserRole : Entity
     {
         public string? Role { get; private set; }
         public string? TargetUserId { get; private set; }
 
-        public AddtionalUserRole(string role,
+        public AdditionalUserRole(string role,
                                   string targetUserId,
                                   bool active)
         {
@@ -15,7 +15,7 @@ namespace iVertion.Domain.Entities
                              targetUserId);
             Active = active;
         }
-        public AddtionalUserRole(int id,
+        public AdditionalUserRole(int id,
                                   string role,
                                   string targetUserId,
                                   bool active)

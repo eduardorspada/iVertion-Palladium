@@ -85,7 +85,7 @@
             User
             </summary>
         </member>
-        <member name="M:iVertion.WebApi.Controllers.UserController.#ctor(iVertion.Domain.Account.IAuthenticate,iVertion.Domain.Account.IUserInterface{iVertion.Infra.Data.Identity.ApplicationUser},iVertion.Domain.Account.IRoleInterface{Microsoft.AspNetCore.Identity.IdentityRole},iVertion.Application.Interfaces.IUserProfileService,iVertion.Application.Interfaces.IRoleProfileService,iVertion.Application.Interfaces.IAddtionalUserRoleService)">
+        <member name="M:iVertion.WebApi.Controllers.UserController.#ctor(iVertion.Domain.Account.IAuthenticate,iVertion.Domain.Account.IUserInterface{iVertion.Infra.Data.Identity.ApplicationUser},iVertion.Domain.Account.IRoleInterface{Microsoft.AspNetCore.Identity.IdentityRole},iVertion.Application.Interfaces.IUserProfileService,iVertion.Application.Interfaces.IRoleProfileService,iVertion.Application.Interfaces.IAdditionalUserRoleService)">
             <summary>
             Constructor
             </summary>
@@ -94,7 +94,7 @@
             <param name="roleService"></param>
             <param name="userProfileService"></param>
             <param name="roleProfileService"></param>
-            <param name="addtionalUserRoleService"></param>
+            <param name="additionalUserRoleService"></param>
         </member>
         <member name="M:iVertion.WebApi.Controllers.UserController.Get">
             <summary>

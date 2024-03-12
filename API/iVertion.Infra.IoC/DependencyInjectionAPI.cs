@@ -43,7 +43,7 @@ namespace iVertion.Infra.IoC
             services.AddScoped<IArticleHistoryRepository, ArticleHistoryRepository>();
             
             // Users Profiles and Roles Repositories
-            services.AddScoped<IAddtionalUserRoleRepository, AddtionalUserRoleRepository>();
+            services.AddScoped<IAdditionalUserRoleRepository, AdditionalUserRoleRepository>();
             services.AddScoped<IUserProfileRepository, UserProfileRepository>();
             services.AddScoped<IRoleProfileRepository, RoleProfileRepository>();
 
@@ -79,7 +79,7 @@ namespace iVertion.Infra.IoC
             // User Profiles Services
             services.AddScoped<IUserProfileService, UserProfileService>();
             services.AddScoped<IRoleProfileService, RoleProfileService>();
-            services.AddScoped<IAddtionalUserRoleService, AddtionalUserRoleService>();
+            services.AddScoped<IAdditionalUserRoleService, AdditionalUserRoleService>();
 
             // AutoMapper for DTOs
             services.AddAutoMapper(typeof(DomainToDTOMappingProfile));

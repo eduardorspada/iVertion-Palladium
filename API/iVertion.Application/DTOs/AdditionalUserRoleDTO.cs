@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace iVertion.Application.DTOs
 {
-    public class AddtionalUserRoleDTO : BaseDTO
+    public class AdditionalUserRoleDTO : BaseDTO
     {
         [Required(ErrorMessage = "Role is required.")]
         [MinLength(5)]

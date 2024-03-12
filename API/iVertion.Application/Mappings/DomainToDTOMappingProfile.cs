@@ -11,7 +11,7 @@ namespace iVertion.Application.Mappings
             // User Profiles and Roles
             CreateMap<UserProfile, UserProfileDTO>().ReverseMap();
             CreateMap<RoleProfile, RoleProfileDTO>().ReverseMap();
-            CreateMap<AddtionalUserRole, AddtionalUserRoleDTO>().ReverseMap();
+            CreateMap<AdditionalUserRole, AdditionalUserRoleDTO>().ReverseMap();
             // Articles
             CreateMap<Article, ArticleDTO>().ReverseMap();
             CreateMap<ArticleHistory, ArticleHistoryDTO>().ReverseMap();
