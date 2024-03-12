@@ -313,43 +313,63 @@ namespace iVertion.WebApi.Controllers
                             var targetUserId = targetUser.Id;
                             var userProfileId = targetUser.UserProfileId;
 
-                    var userProfile = await _userProfileService.GetUserProfileByIdAsync(userProfileId);
-                    if (userProfile.Data == null)
-                        return NotFound("This Id does not correspond to an existing User Profile.");
-                    if (userProfile.IsSuccess){
-                        var roleProfileFilterdb = new RoleProfileFilterDb(){
-                        UserProfileId = userProfileId,
-                        PageSize = 10000, 
-                        OrderByProperty = "Id", 
-                        Page=1, 
-                        Role= addtionalUserRoleModel.Role, 
-                        UserId=null
-                        };
-                        var rolesProfiles = await _roleProfileService.GetRoleProfilesAsync(roleProfileFilterdb);
-                        
+                            var userProfile = await _userProfileService.GetUserProfileByIdAsync(userProfileId);
+                            if (userProfile.Data == null)
+                                return NotFound("This Id does not correspond to an existing User Profile.");
+                            if (userProfile.IsSuccess){
+                                var roleProfileFilterdb = new RoleProfileFilterDb(){
+                                UserProfileId = userProfileId,
+                                PageSize = 10000, 
+                                OrderByProperty = "Id", 
+                                Page=1, 
+                                Role= addtionalUserRoleModel.Role, 
+                                UserId=null
+                                };
+                                var rolesProfiles = await _roleProfileService.GetRoleProfilesAsync(roleProfileFilterdb);
+                                
 
-                        var roleModel = new List<string>();
-                        var roleProfileId = 0;
-                        foreach(var role in rolesProfiles.Data.Data){
-                            roleModel.Add(role.Role);
-                            roleProfileId = role.Id;
-                        }
-                        if (!roleModel.Contains(addtionalUserRoleModel.Role)){
-                            var addtionalUserRoleDto = new AddtionalUserRoleDTO();
-                            var userId = User.FindFirst("UId").Value;
-                            var dateNow = DateTime.UtcNow;
-                            addtionalUserRoleDto.Role = addtionalUserRoleModel.Role;
-                            addtionalUserRoleDto.TargetUserId = targetUserId;
-                            addtionalUserRoleDto.UserId = userId;
-                            addtionalUserRoleDto.Active = true;
-                            addtionalUserRoleDto.CreatedAt = dateNow;
-                            addtionalUserRoleDto.UpdatedAt = dateNow;
-                            await _addtionalUserRoleService.CreateAddtionalUserRoleAsync(addtionalUserRoleDto);
-                            return Ok($@"The {addtionalUserRoleModel.Role} has been successfully assigned to the {targetUser.FullName}.");
-                        }
-                        return Conflict($@"The {addtionalUserRoleModel.Role} already exists in this {targetUser.FullName}'s role profile.");
-                    }
-                    return BadRequest(userProfile);
+                                var roleModel = new List<string>();
+                                var roleProfileId = 0;
+                                foreach(var role in rolesProfiles.Data.Data){
+                                    roleModel.Add(role.Role);
+                                    roleProfileId = role.Id;
+                                }
+                                if (!roleModel.Contains(addtionalUserRoleModel.Role)){
+                                    var additionalUserRolesFilterDb = new AddtionalUserRoleFilterDb(){
+                                        TargetUserId = targetUserId,
+                                        PageSize = 10000, 
+                                        OrderByProperty = "Id", 
+                                        Page=1, 
+                                        Role=addtionalUserRoleModel.Role, 
+                                        UserId=null
+                                        };
+                                    var additionalUserRoles = await _addtionalUserRoleService.GetAddtionalUserRolesAsync(additionalUserRolesFilterDb);
+                                    var additionalRoles = new List<string>();
+                                    var additionalUserRoleId = 0;
+                                    foreach(var role in additionalUserRoles.Data.Data){
+                                        additionalRoles.Add(role.Role);
+                                        additionalUserRoleId = role.Id;
+                                    }
+                                    if (!additionalRoles.Contains(addtionalUserRoleModel.Role)){
+                                        var addtionalUserRoleDto = new AddtionalUserRoleDTO();
+                                        var userId = User.FindFirst("UId").Value;
+                                        var dateNow = DateTime.UtcNow;
+                                        addtionalUserRoleDto.Role = addtionalUserRoleModel.Role;
+                                        addtionalUserRoleDto.TargetUserId = targetUserId;
+                                        addtionalUserRoleDto.UserId = userId;
+                                        addtionalUserRoleDto.Active = true;
+                                        addtionalUserRoleDto.CreatedAt = dateNow;
+                                        addtionalUserRoleDto.UpdatedAt = dateNow;
+                                        
+                                        await _addtionalUserRoleService.CreateAddtionalUserRoleAsync(addtionalUserRoleDto);
+                                        return Ok($@"The {addtionalUserRoleModel.Role} has been successfully assigned to the {targetUser.FullName}.");
+                                    }
+                                    return Conflict($@"The {addtionalUserRoleModel.Role} already exists in this {targetUser.FullName}'s additional roles.");
+
+                                }
+                                return Conflict($@"The {addtionalUserRoleModel.Role} already exists in this {targetUser.FullName}'s role profile.");
+                            }
+                            return BadRequest(userProfile);
                         } catch {
                             return NotFound($@"The specified user '{addtionalUserRoleModel.UserName}', does not exist in the system!");
                         }
