@@ -299,16 +299,16 @@ namespace iVertion.WebApi.Controllers
         /// <summary>
         /// Adds an additional role to a user beyond the role profile they belong to.
         /// </summary>
-        /// <param name="addtionalUserRoleModel"></param>
+        /// <param name="additionalUserRoleModel"></param>
         /// <returns></returns>
         [HttpPost("AdditionalUserRole")]
         [Authorize(Roles = "AddToRole")]
-        public async Task<ActionResult> AddAddtionalUserRoleAsync([FromBody] AddtionalUserRoleModel addtionalUserRoleModel){
-            if (!String.IsNullOrEmpty(addtionalUserRoleModel.Role)) {
-                if (!String.IsNullOrEmpty(addtionalUserRoleModel.UserName)){
-                    var roleExists = await _roleService.RoleExistsAsync(addtionalUserRoleModel.Role);
+        public async Task<ActionResult> AddAddtionalUserRoleAsync([FromBody] AdditionalUserRoleModel additionalUserRoleModel){
+            if (!String.IsNullOrEmpty(additionalUserRoleModel.Role)) {
+                if (!String.IsNullOrEmpty(additionalUserRoleModel.UserName)){
+                    var roleExists = await _roleService.RoleExistsAsync(additionalUserRoleModel.Role);
                     if (roleExists) {
-                        var targetUser = await _userService.GetUserByNameAsync(addtionalUserRoleModel.UserName);
+                        var targetUser = await _userService.GetUserByNameAsync(additionalUserRoleModel.UserName);
                         try {
                             var targetUserId = targetUser.Id;
                             var userProfileId = targetUser.UserProfileId;
@@ -322,7 +322,7 @@ namespace iVertion.WebApi.Controllers
                                 PageSize = 10000, 
                                 OrderByProperty = "Id", 
                                 Page=1, 
-                                Role= addtionalUserRoleModel.Role, 
+                                Role= additionalUserRoleModel.Role, 
                                 UserId=null
                                 };
                                 var rolesProfiles = await _roleProfileService.GetRoleProfilesAsync(roleProfileFilterdb);
@@ -334,13 +334,13 @@ namespace iVertion.WebApi.Controllers
                                     roleModel.Add(role.Role);
                                     roleProfileId = role.Id;
                                 }
-                                if (!roleModel.Contains(addtionalUserRoleModel.Role)){
+                                if (!roleModel.Contains(additionalUserRoleModel.Role)){
                                     var additionalUserRolesFilterDb = new AddtionalUserRoleFilterDb(){
                                         TargetUserId = targetUserId,
                                         PageSize = 10000, 
                                         OrderByProperty = "Id", 
                                         Page=1, 
-                                        Role=addtionalUserRoleModel.Role, 
+                                        Role=additionalUserRoleModel.Role, 
                                         UserId=null
                                         };
                                     var additionalUserRoles = await _addtionalUserRoleService.GetAddtionalUserRolesAsync(additionalUserRolesFilterDb);
@@ -350,11 +350,11 @@ namespace iVertion.WebApi.Controllers
                                         additionalRoles.Add(role.Role);
                                         additionalUserRoleId = role.Id;
                                     }
-                                    if (!additionalRoles.Contains(addtionalUserRoleModel.Role)){
+                                    if (!additionalRoles.Contains(additionalUserRoleModel.Role)){
                                         var addtionalUserRoleDto = new AddtionalUserRoleDTO();
                                         var userId = User.FindFirst("UId").Value;
                                         var dateNow = DateTime.UtcNow;
-                                        addtionalUserRoleDto.Role = addtionalUserRoleModel.Role;
+                                        addtionalUserRoleDto.Role = additionalUserRoleModel.Role;
                                         addtionalUserRoleDto.TargetUserId = targetUserId;
                                         addtionalUserRoleDto.UserId = userId;
                                         addtionalUserRoleDto.Active = true;
@@ -362,19 +362,19 @@ namespace iVertion.WebApi.Controllers
                                         addtionalUserRoleDto.UpdatedAt = dateNow;
                                         
                                         await _addtionalUserRoleService.CreateAddtionalUserRoleAsync(addtionalUserRoleDto);
-                                        return Ok($@"The {addtionalUserRoleModel.Role} has been successfully assigned to the {targetUser.FullName}.");
+                                        return Ok($@"The {additionalUserRoleModel.Role} has been successfully assigned to the {targetUser.FullName}.");
                                     }
-                                    return Conflict($@"The {addtionalUserRoleModel.Role} already exists in this {targetUser.FullName}'s additional roles.");
+                                    return Conflict($@"The {additionalUserRoleModel.Role} already exists in this {targetUser.FullName}'s additional roles.");
 
                                 }
-                                return Conflict($@"The {addtionalUserRoleModel.Role} already exists in this {targetUser.FullName}'s role profile.");
+                                return Conflict($@"The {additionalUserRoleModel.Role} already exists in this {targetUser.FullName}'s role profile.");
                             }
                             return BadRequest(userProfile);
                         } catch {
-                            return NotFound($@"The specified user '{addtionalUserRoleModel.UserName}', does not exist in the system!");
+                            return NotFound($@"The specified user '{additionalUserRoleModel.UserName}', does not exist in the system!");
                         }
                     }
-                    return NotFound($@"The specified role '{addtionalUserRoleModel.Role}', does not exist in the system!");
+                    return NotFound($@"The specified role '{additionalUserRoleModel.Role}', does not exist in the system!");
                 }
                 return BadRequest("UserName is not be null or empty");
             }
@@ -383,16 +383,16 @@ namespace iVertion.WebApi.Controllers
         /// <summary>
         /// Remove an additional role to a user beyond the role profile they belong to.
         /// </summary>
-        /// <param name="addtionalUserRoleModel"></param>
+        /// <param name="additionalUserRoleModel"></param>
         /// <returns></returns>
         [HttpDelete("AdditionalUserRole")]
         [Authorize(Roles = "RemoveFromRole")]
-        public async Task<ActionResult> RemoveAddtionalUserRoleAsync([FromBody] AddtionalUserRoleModel addtionalUserRoleModel){
-            if (!String.IsNullOrEmpty(addtionalUserRoleModel.Role)) {
-                if (!String.IsNullOrEmpty(addtionalUserRoleModel.UserName)){
-                    var roleExists = await _roleService.RoleExistsAsync(addtionalUserRoleModel.Role);
+        public async Task<ActionResult> RemoveAddtionalUserRoleAsync([FromBody] AdditionalUserRoleModel additionalUserRoleModel){
+            if (!String.IsNullOrEmpty(additionalUserRoleModel.Role)) {
+                if (!String.IsNullOrEmpty(additionalUserRoleModel.UserName)){
+                    var roleExists = await _roleService.RoleExistsAsync(additionalUserRoleModel.Role);
                     if (roleExists) {
-                        var targetUser = await _userService.GetUserByNameAsync(addtionalUserRoleModel.UserName);
+                        var targetUser = await _userService.GetUserByNameAsync(additionalUserRoleModel.UserName);
                         try {
                             var targetUserId = targetUser.Id;
 
@@ -401,7 +401,7 @@ namespace iVertion.WebApi.Controllers
                                 PageSize = 10000, 
                                 OrderByProperty = "Id", 
                                 Page=1, 
-                                Role=addtionalUserRoleModel.Role, 
+                                Role=additionalUserRoleModel.Role, 
                                 UserId=null
                                 };
                             var additionalUserRoles = await _addtionalUserRoleService.GetAddtionalUserRolesAsync(additionalUserRolesFilterDb);
@@ -412,17 +412,17 @@ namespace iVertion.WebApi.Controllers
                                     roleModel.Add(role.Role);
                                     additionalUserRoleId = role.Id;
                                 }
-                                if (roleModel.Contains(addtionalUserRoleModel.Role)){
+                                if (roleModel.Contains(additionalUserRoleModel.Role)){
                                     await _addtionalUserRoleService.RemoveAddtionalUserRoleAsync(additionalUserRoleId);
-                                    return Ok($@"The {addtionalUserRoleModel.Role} has been successfully removed from the {targetUser.FullName}.");
+                                    return Ok($@"The {additionalUserRoleModel.Role} has been successfully removed from the {targetUser.FullName}.");
                                 }
-                                return Conflict($@"The {addtionalUserRoleModel.Role} not exists in this {targetUser.FullName}'s additional roles.");
+                                return Conflict($@"The {additionalUserRoleModel.Role} not exists in this {targetUser.FullName}'s additional roles.");
 
                         } catch {
-                            return NotFound($@"The specified user '{addtionalUserRoleModel.UserName}', does not exist in the system!");
+                            return NotFound($@"The specified user '{additionalUserRoleModel.UserName}', does not exist in the system!");
                         }
                     }
-                    return NotFound($@"The specified role '{addtionalUserRoleModel.Role}', does not exist in the system!");
+                    return NotFound($@"The specified role '{additionalUserRoleModel.Role}', does not exist in the system!");
                 }
                 return BadRequest("UserName is not be null or empty");
             }

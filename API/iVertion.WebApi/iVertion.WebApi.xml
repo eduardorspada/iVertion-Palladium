@@ -158,18 +158,18 @@
             <param name="roleProfileFilterDb"></param>
             <returns></returns>
         </member>
-        <member name="M:iVertion.WebApi.Controllers.UserController.AddAddtionalUserRoleAsync(iVertion.WebApi.Models.AddtionalUserRoleModel)">
+        <member name="M:iVertion.WebApi.Controllers.UserController.AddAddtionalUserRoleAsync(iVertion.WebApi.Models.AdditionalUserRoleModel)">
             <summary>
             Adds an additional role to a user beyond the role profile they belong to.
             </summary>
-            <param name="addtionalUserRoleModel"></param>
+            <param name="additionalUserRoleModel"></param>
             <returns></returns>
         </member>
-        <member name="M:iVertion.WebApi.Controllers.UserController.RemoveAddtionalUserRoleAsync(iVertion.WebApi.Models.AddtionalUserRoleModel)">
+        <member name="M:iVertion.WebApi.Controllers.UserController.RemoveAddtionalUserRoleAsync(iVertion.WebApi.Models.AdditionalUserRoleModel)">
             <summary>
             Remove an additional role to a user beyond the role profile they belong to.
             </summary>
-            <param name="addtionalUserRoleModel"></param>
+            <param name="additionalUserRoleModel"></param>
             <returns></returns>
         </member>
         <member name="M:iVertion.WebApi.Controllers.UserController.GetRolesAsync">
@@ -249,17 +249,17 @@
             <param name="myUserNameModel"></param>
             <returns></returns>
         </member>
-        <member name="T:iVertion.WebApi.Models.AddtionalUserRoleModel">
+        <member name="T:iVertion.WebApi.Models.AdditionalUserRoleModel">
             <summary>
             This model is the body of users' requests for additional roles.
             </summary>
         </member>
-        <member name="P:iVertion.WebApi.Models.AddtionalUserRoleModel.Role">
+        <member name="P:iVertion.WebApi.Models.AdditionalUserRoleModel.Role">
             <summary>
             A role registered in the Identity roles.
             </summary>
         </member>
-        <member name="P:iVertion.WebApi.Models.AddtionalUserRoleModel.UserName">
+        <member name="P:iVertion.WebApi.Models.AdditionalUserRoleModel.UserName">
             <summary>
             An existing username on Identity.
             </summary>
