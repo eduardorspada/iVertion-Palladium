@@ -165,6 +165,13 @@
             <param name="addtionalUserRoleModel"></param>
             <returns></returns>
         </member>
+        <member name="M:iVertion.WebApi.Controllers.UserController.RemoveAddtionalUserRoleAsync(iVertion.WebApi.Models.AddtionalUserRoleModel)">
+            <summary>
+            Remove an additional role to a user beyond the role profile they belong to.
+            </summary>
+            <param name="addtionalUserRoleModel"></param>
+            <returns></returns>
+        </member>
         <member name="M:iVertion.WebApi.Controllers.UserController.GetRolesAsync">
             <summary>
             Returns a list of roles.
