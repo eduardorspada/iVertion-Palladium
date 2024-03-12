@@ -38,6 +38,8 @@ namespace iVertion.WebApi.Controllers
         /// <param name="authentication"></param>
         /// <param name="configuration"></param>
         /// <param name="userService"></param>
+        /// <param name="userProfileService"></param>
+        /// <param name="roleProfileService"></param>
         public TokenController(IAuthenticate authentication,
                                IConfiguration configuration,
                                IUserInterface<ApplicationUser> userService,
@@ -58,7 +60,6 @@ namespace iVertion.WebApi.Controllers
         /// <summary>
         /// Validate the token
         /// </summary>
-        /// <param name="userToken"></param>
         /// <returns></returns>
         [HttpGet("ValidateTokenAsync")]
         [Authorize]
