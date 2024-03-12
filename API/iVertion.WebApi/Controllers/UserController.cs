@@ -381,7 +381,7 @@ namespace iVertion.WebApi.Controllers
                                 PageSize = 10000, 
                                 OrderByProperty = "Id", 
                                 Page=1, 
-                                Role=null, 
+                                Role=addtionalUserRoleModel.Role, 
                                 UserId=null
                                 };
                             var additionalUserRoles = await _addtionalUserRoleService.GetAddtionalUserRolesAsync(additionalUserRolesFilterDb);
