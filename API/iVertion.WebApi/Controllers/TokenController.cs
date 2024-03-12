@@ -32,6 +32,7 @@ namespace iVertion.WebApi.Controllers
         private readonly IUserInterface<ApplicationUser> _userService;
         private readonly IUserProfileService _userProfileService;
         private readonly IRoleProfileService _roleProfileService;
+        private readonly IAdditionalUserRoleService _additionalUserRoleService;
         /// <summary>
         /// Contructor.
         /// </summary>
@@ -40,11 +41,13 @@ namespace iVertion.WebApi.Controllers
         /// <param name="userService"></param>
         /// <param name="userProfileService"></param>
         /// <param name="roleProfileService"></param>
+        /// <param name="additionalUserRoleService"></param>
         public TokenController(IAuthenticate authentication,
                                IConfiguration configuration,
                                IUserInterface<ApplicationUser> userService,
                                IUserProfileService userProfileService,
-                               IRoleProfileService roleProfileService)
+                               IRoleProfileService roleProfileService,
+                               IAdditionalUserRoleService additionalUserRoleService)
         {
             _authentication = authentication ??
                 throw new ArgumentNullException(nameof(authentication));
@@ -56,6 +59,8 @@ namespace iVertion.WebApi.Controllers
                 throw new ArgumentNullException(nameof(userProfileService));
             _roleProfileService = roleProfileService ??
                 throw new ArgumentNullException(nameof(roleProfileService));
+            _additionalUserRoleService = additionalUserRoleService ??
+                throw new ArgumentNullException(nameof(additionalUserRoleService));
         }
         /// <summary>
         /// Validate the token
@@ -97,7 +102,7 @@ namespace iVertion.WebApi.Controllers
             }
         }
 
-        private async Task<List<string>> GetRolesProfileAsync(int userProfileId){
+        private async Task<List<string>> GetAllUserRolesAsync(int userProfileId, string targetUserId){
             var roleProfileFilterdb = new RoleProfileFilterDb(){
             UserProfileId = userProfileId,
             PageSize = 10000, 
@@ -107,10 +112,22 @@ namespace iVertion.WebApi.Controllers
             UserId=null
             };
             var rolesProfiles = await _roleProfileService.GetRoleProfilesAsync(roleProfileFilterdb);
+            var additionalUserRolesFilterDb = new AdditionalUserRoleFilterDb(){
+            TargetUserId = targetUserId,
+            PageSize = 10000, 
+            OrderByProperty = "Id", 
+            Page=1, 
+            Role=null, 
+            UserId=null
+            };
+            var additionalUserRoles = await _additionalUserRoleService.GetAdditionalUserRolesAsync(additionalUserRolesFilterDb);
             
 
             var roleModel = new List<string>();
             foreach(var role in rolesProfiles.Data.Data){
+                roleModel.Add(role.Role);
+            }
+            foreach(var role in additionalUserRoles.Data.Data){
                 roleModel.Add(role.Role);
             }
             return roleModel;
@@ -135,7 +152,7 @@ namespace iVertion.WebApi.Controllers
         {
             var user = await _userService.GetUserByNameAsync(userInfo.Email);
             var userProfile = await _userProfileService.GetUserProfileByIdAsync(user.UserProfileId);
-            var newRoles = await GetRolesProfileAsync(user.UserProfileId);
+            var newRoles = await GetAllUserRolesAsync(user.UserProfileId, user.Id);
             var oldRoles = await _userService.GetUserRolesAsync(userInfo.Email);
 
             await UpdateUserRolesAsync(oldRoles, newRoles, user);
